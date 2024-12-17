@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/widgets/dashboard.dart';
 
 void main() {
@@ -10,8 +11,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: QuickListTheme().appTheme,
       home: Dashboard()
     );
   }
