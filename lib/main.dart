@@ -14,19 +14,6 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: QuickListTheme().appTheme,
-      // theme: ThemeData(
-      //   useMaterial3: true,
-      //   colorScheme: ColorScheme.fromSeed(
-      //     seedColor: Colors.blue,
-      //     brightness: Brightness.dark,
-      //   ),
-      //   textTheme: TextTheme(
-      //     displayLarge: const TextStyle(
-      //       fontSize: 72,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
       home: Dashboard()
     );
   }
