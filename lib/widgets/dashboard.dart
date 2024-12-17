@@ -18,7 +18,6 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
-        // backgroundColor: Color(0xFF5D6B85),
       ),
       body: Center(
         child: Column(
