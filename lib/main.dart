@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/widgets/dashboard.dart';
 
 void main() {
@@ -10,8 +11,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: QuickListTheme().appTheme,
+      // theme: ThemeData(
+      //   useMaterial3: true,
+      //   colorScheme: ColorScheme.fromSeed(
+      //     seedColor: Colors.blue,
+      //     brightness: Brightness.dark,
+      //   ),
+      //   textTheme: TextTheme(
+      //     displayLarge: const TextStyle(
+      //       fontSize: 72,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      // ),
       home: Dashboard()
     );
   }
