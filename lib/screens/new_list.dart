@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/widgets/list_item.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class NewList extends StatefulWidget {
@@ -10,6 +11,16 @@ class NewList extends StatefulWidget {
 
 class _NewListState extends State<NewList> {
   final _formKey = GlobalKey<FormState>();
+
+  final listTextFieldController = TextEditingController();
+
+  void convertTextToList() {
+    String textFieldContent = listTextFieldController.text;
+
+    if (textFieldContent.isEmpty) return;
+
+    List<String> listItems = textFieldContent.split('\n');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +39,24 @@ class _NewListState extends State<NewList> {
                 label: 'Title',
                 isRequired: true,
               ),
+              Padding(padding: EdgeInsets.all(8)),
+              Expanded(
+                child: TextFormField(
+                  controller: listTextFieldController,
+                  minLines: 2,
+                  maxLines: 100,
+                  decoration: InputDecoration(
+                    hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
+                  ),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
+                    convertTextToList();
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Processing Data')),
+                    // );
                   }
                 },
                 child: const Text('Submit'),
