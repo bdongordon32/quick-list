@@ -41,13 +41,12 @@ class _NewListState extends State<NewList> {
               ),
               Padding(padding: EdgeInsets.all(8)),
               Expanded(
-                child: TextFormField(
-                  controller: listTextFieldController,
-                  minLines: 2,
-                  maxLines: 100,
-                  decoration: InputDecoration(
-                    hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
-                  ),
+                child: TextInput(
+                  label: 'Content',
+                  inputController: listTextFieldController,
+                  minNoOfLines: 1,
+                  maxNoOfLines: 100,
+                  hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
                 ),
               ),
               ElevatedButton(

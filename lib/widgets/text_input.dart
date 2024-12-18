@@ -6,12 +6,18 @@ class TextInput extends StatelessWidget {
     required this.label,
     this.isRequired = false,
     this.inputController,
+    this.minNoOfLines = 1,
+    this.maxNoOfLines = 1,
+    this.hintText,
     super.key
   });
 
   final String label;
   final bool isRequired;
+  final int minNoOfLines;
+  final int maxNoOfLines;
   final TextEditingController? inputController;
+  final String? hintText;
 
   String? validateInput(value) {
     if ((value == null || value.isEmpty) && isRequired) {
@@ -24,20 +30,11 @@ class TextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: inputController,
+      minLines: minNoOfLines,
+      maxLines: maxNoOfLines,
       decoration: InputDecoration(
-        prefixIcon: Container(
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.only(right: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(8)),
-            color: primaryDarkAccent,
-          ),
-          child: Text(
-            label,
-            style: TextStyle(color: primaryLightAccent, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-        )
+        labelText: label,
+        hintText: hintText
       ),
       validator: (value) => validateInput(value),
     );
