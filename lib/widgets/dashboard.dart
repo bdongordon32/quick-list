@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/widgets/quick_list_container.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({ super.key });
@@ -8,9 +9,15 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  List<String> listItems = ['1', '2'];
 
   void addNewList() {
-    print("Adding new");
+    List<String> tempItems = listItems;
+    tempItems.add('5');
+
+    setState(() {
+      listItems = tempItems;
+    });
   }
 
   @override
@@ -20,11 +27,7 @@ class _DashboardState extends State<Dashboard> {
         title: Text('Dashboard'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Text('Dashboard')
-          ],
-        ),
+        child: QuickListContainer(listItems)
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: addNewList,
