@@ -12,11 +12,11 @@ class QuickListTheme {
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 20.0
-      )
+      ),
+      iconTheme: IconThemeData(color: Colors.white)
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color(0xFF5D6B85),
-      
     ),
     colorScheme: ColorScheme.fromSeed(
       seedColor: Color(0xFF5D6B85),

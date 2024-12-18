@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
 
 class Dashboard extends StatefulWidget {
@@ -12,12 +13,10 @@ class _DashboardState extends State<Dashboard> {
   List<String> listItems = [];
 
   void addNewList() {
-    List<String> tempItems = listItems;
-    tempItems.add('5');
-
-    setState(() {
-      listItems = tempItems;
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NewList()),
+    );
   }
 
   @override
