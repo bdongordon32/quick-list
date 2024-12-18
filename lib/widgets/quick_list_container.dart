@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/widgets/empty_quick_list_card.dart';
 
 class QuickListContainer extends StatelessWidget {
   const QuickListContainer(this.listItems, { super.key });
@@ -9,7 +10,7 @@ class QuickListContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: listItems.isEmpty ?
-        Text('Empty List') :
+        EmptyQuickListCard() :
         ListView.separated(
           padding: const EdgeInsets.all(8),
           itemCount: listItems.length,

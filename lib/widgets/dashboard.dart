@@ -9,7 +9,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<String> listItems = ['1', '2'];
+  List<String> listItems = [];
 
   void addNewList() {
     List<String> tempItems = listItems;
@@ -26,9 +26,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text('Dashboard'),
       ),
-      body: Center(
-        child: QuickListContainer(listItems)
-      ),
+      body: QuickListContainer(listItems),
       floatingActionButton: FloatingActionButton(
         onPressed: addNewList,
         child: Icon(
