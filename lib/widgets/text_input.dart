@@ -2,7 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:quick_list/app_theme.dart';
 
 class TextInput extends StatelessWidget {
-  const TextInput({super.key});
+  const TextInput({
+    required this.label,
+    this.isRequired = false,
+    super.key
+  });
+
+  final String label;
+  final bool isRequired;
+
+  String? validateInput(value) {
+    if ((value == null || value.isEmpty) && isRequired) {
+      return 'Please fill out field';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +31,13 @@ class TextInput extends StatelessWidget {
               color: primaryDarkAccent,
             ),
             child: Text(
-              'Title',
+              label,
               style: TextStyle(color: primaryLightAccent, fontSize: 16),
               textAlign: TextAlign.center,
             ),
           )
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
+        validator: (value) => validateInput(value),
       ),
     );
   }

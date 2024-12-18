@@ -24,7 +24,10 @@ class _NewListState extends State<NewList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextInput(),
+              TextInput(
+                label: 'Title',
+                isRequired: true,
+              ),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
