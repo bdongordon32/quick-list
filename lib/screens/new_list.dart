@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quick_list/widgets/list_item.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class NewList extends StatefulWidget {
@@ -49,17 +48,17 @@ class _NewListState extends State<NewList> {
                   hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    convertTextToList();
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Processing Data')),
-                    // );
-                  }
-                },
-                child: const Text('Submit'),
-              ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      convertTextToList();
+                    }
+                  },
+                  child: const Text('Submit', style: TextStyle(color: Colors.white),),
+                ),
+              )
             ],
           ),
         )

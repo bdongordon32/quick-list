@@ -22,5 +22,13 @@ class QuickListTheme {
       seedColor: Color(0xFF5D6B85),
       brightness: Brightness.light,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryDarkAccent,
+        textStyle: TextStyle(
+          color:  primaryLightAccent,
+        )
+      )
+    )
   );
 }

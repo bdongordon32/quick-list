@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quick_list/app_theme.dart';
 
 class TextInput extends StatelessWidget {
   const TextInput({
@@ -33,8 +32,8 @@ class TextInput extends StatelessWidget {
       minLines: minNoOfLines,
       maxLines: maxNoOfLines,
       decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText
+        labelText: isRequired ? "$label (required)" : label,
+        hintText: hintText,
       ),
       validator: (value) => validateInput(value),
     );
