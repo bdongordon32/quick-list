@@ -12,6 +12,7 @@ class _NewListState extends State<NewList> {
   final _formKey = GlobalKey<FormState>();
 
   final listTextFieldController = TextEditingController();
+  final titleController = TextEditingController();
 
   void convertTextToList() {
     String textFieldContent = listTextFieldController.text;
@@ -36,6 +37,7 @@ class _NewListState extends State<NewList> {
             children: [
               TextInput(
                 label: 'Title',
+                inputController: titleController,
                 isRequired: true,
               ),
               Padding(padding: EdgeInsets.all(8)),
@@ -56,7 +58,7 @@ class _NewListState extends State<NewList> {
                       convertTextToList();
                     }
                   },
-                  child: const Text('Submit', style: TextStyle(color: Colors.white),),
+                  child: const Text('Create List', style: TextStyle(color: Colors.white),),
                 ),
               )
             ],
