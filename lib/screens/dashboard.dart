@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
 
@@ -10,13 +12,31 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<String> listItems = [];
+  List<QuickList> listItems = [];
+  // // late Future<List<QuickList>> listItems;
+  
+
+  FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   void addNewList() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NewList()),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    fireDb.collection('lists').get()
+      .then((event) {
+        for (var doc in event.docs) {
+          var hm = QuickList.fromSnapshot(doc);
+          print(hm);
+          // print("${doc.id} => ${doc.data()}");
+        }
+      });
   }
 
   @override
