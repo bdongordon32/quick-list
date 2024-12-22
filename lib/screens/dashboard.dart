@@ -32,9 +32,11 @@ class _DashboardState extends State<Dashboard> {
     fireDb.collection('lists').get()
       .then((event) {
         for (var doc in event.docs) {
-          var hm = QuickList.fromSnapshot(doc);
-          print(hm);
-          // print("${doc.id} => ${doc.data()}");
+          QuickList listItem = QuickList.fromSnapshot(doc);
+          List<QuickList> documentItems = listItems;
+          documentItems.add(listItem);
+          
+          setState(() { listItems = documentItems; });
         }
       });
   }
