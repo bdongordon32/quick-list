@@ -60,7 +60,8 @@ class _NewListState extends State<NewList> {
                   },
                   child: const Text('Create List', style: TextStyle(color: Colors.white),),
                 ),
-              )
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 8))
             ],
           ),
         )
