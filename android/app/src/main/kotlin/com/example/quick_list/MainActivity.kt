@@ -1,4 +1,4 @@
-package com.example.quick_list
+package com.quicklist.app
 
 import io.flutter.embedding.android.FlutterActivity
 

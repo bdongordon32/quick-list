@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977213189126",
+    "project_id": "quick-33f6d",
+    "storage_bucket": "quick-33f6d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977213189126:android:c7f9899085e3fc9fc72787",
+        "android_client_info": {
+          "package_name": "com.quicklist.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAriv4Q-vgpV4KsW8_mUmxpzHZWOLYa_fM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

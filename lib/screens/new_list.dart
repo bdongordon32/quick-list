@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quick_list/widgets/list_item.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class NewList extends StatefulWidget {
@@ -13,6 +12,7 @@ class _NewListState extends State<NewList> {
   final _formKey = GlobalKey<FormState>();
 
   final listTextFieldController = TextEditingController();
+  final titleController = TextEditingController();
 
   void convertTextToList() {
     String textFieldContent = listTextFieldController.text;
@@ -37,30 +37,31 @@ class _NewListState extends State<NewList> {
             children: [
               TextInput(
                 label: 'Title',
+                inputController: titleController,
                 isRequired: true,
               ),
               Padding(padding: EdgeInsets.all(8)),
               Expanded(
-                child: TextFormField(
-                  controller: listTextFieldController,
-                  minLines: 2,
-                  maxLines: 100,
-                  decoration: InputDecoration(
-                    hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
-                  ),
+                child: TextInput(
+                  label: 'Content',
+                  inputController: listTextFieldController,
+                  minNoOfLines: 1,
+                  maxNoOfLines: 100,
+                  hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    convertTextToList();
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Processing Data')),
-                    // );
-                  }
-                },
-                child: const Text('Submit'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      convertTextToList();
+                    }
+                  },
+                  child: const Text('Create List', style: TextStyle(color: Colors.white),),
+                ),
               ),
+              Padding(padding: EdgeInsets.only(bottom: 8))
             ],
           ),
         )
