@@ -12,8 +12,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<QuickList> listItems = [];
-  // // late Future<List<QuickList>> listItems;
+  List<QuickList> quickLists = [];
+  // // late Future<List<QuickList>> quickLists;
   
 
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
@@ -33,10 +33,10 @@ class _DashboardState extends State<Dashboard> {
       .then((event) {
         for (var doc in event.docs) {
           QuickList listItem = QuickList.fromSnapshot(doc);
-          List<QuickList> documentItems = listItems;
+          List<QuickList> documentItems = quickLists;
           documentItems.add(listItem);
           
-          setState(() { listItems = documentItems; });
+          setState(() { quickLists = documentItems; });
         }
       });
   }
@@ -47,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text('Dashboard'),
       ),
-      body: QuickListContainer(listItems),
+      body: QuickListContainer(quickLists),
       floatingActionButton: FloatingActionButton(
         onPressed: addNewList,
         child: Icon(
