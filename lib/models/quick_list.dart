@@ -21,4 +21,15 @@ class QuickList {
       listItems: data?['listItems']
     );
   }
+
+  void completedSubtitle() {
+    if (listItems!.isEmpty) { return; }
+
+    for (var item in listItems!) {
+      item.get()
+        .then((DocumentSnapshot snapshot) {
+          print(snapshot);
+        });
+    }
+  }
 }

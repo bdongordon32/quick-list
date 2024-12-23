@@ -13,6 +13,7 @@ class QuickListCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         print("TAPPED CARD");
+        quickList.completedSubtitle();
       },
       child: Container(
         decoration: BoxDecoration(
