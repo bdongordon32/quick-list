@@ -4,9 +4,9 @@ import 'package:quick_list/models/quick_list_item.dart';
 class QuickList {
   final String title;
   final String rawContent;
-  final List<dynamic>? listItems;
+  List<dynamic>? listItems;
 
-  const QuickList({
+  QuickList({
     this.title = '',
     this.rawContent = '',
     this.listItems
@@ -18,8 +18,12 @@ class QuickList {
     return QuickList(
       title: data?['title'],
       rawContent: data?['rawContent'],
-      listItems: data?['listItems']
     );
+  }
+
+  void addToListItems(listItem) {
+    listItems ??= [];
+    listItems!.add(listItem);
   }
 
   void completedSubtitle() {

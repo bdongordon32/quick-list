@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
 
@@ -32,11 +33,19 @@ class _DashboardState extends State<Dashboard> {
     fireDb.collection('lists').get()
       .then((event) {
         for (var doc in event.docs) {
-          QuickList listItem = QuickList.fromSnapshot(doc);
-          List<QuickList> documentItems = quickLists;
-          documentItems.add(listItem);
-          
-          setState(() { quickLists = documentItems; });
+          QuickList quickList = QuickList.fromSnapshot(doc);
+
+          for (var item in doc.get('listItems')) {
+            item.get()
+              .then((var listItemSnapshot) {
+                QuickListItem listItem = QuickListItem.fromSnapshot(listItemSnapshot);
+                quickList.addToListItems(listItem);
+
+                List<QuickList> documentItems = quickLists;
+                documentItems.add(quickList);
+                setState(() { quickLists = documentItems; });
+              });
+          }
         }
       });
   }
