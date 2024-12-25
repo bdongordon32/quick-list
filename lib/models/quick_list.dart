@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quick_list/models/quick_list_item.dart';
 
 class QuickList {
   final String title;
