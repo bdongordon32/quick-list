@@ -25,14 +25,14 @@ class QuickList {
     listItems!.add(listItem);
   }
 
-  void completedSubtitle() {
-    if (listItems!.isEmpty) { return; }
-
-    for (var item in listItems!) {
-      item.get()
-        .then((DocumentSnapshot snapshot) {
-          print(snapshot);
-        });
+  String cardSubtitle() {
+    if (listItems!.isEmpty) {
+      return 'No items';
     }
+
+    int completeItems = listItems!.where((item) => item.completed).length;
+    int listCount = listItems!.length;
+
+    return '$completeItems/$listCount items completed';
   }
 }

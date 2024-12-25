@@ -13,7 +13,7 @@ class QuickListCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         print("TAPPED CARD");
-        quickList.completedSubtitle();
+        // quickList.completedSubtitle();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -38,7 +38,7 @@ class QuickListCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '4/8 items completed',
+                  quickList.cardSubtitle(),
                   style: TextStyle(
                     color: primaryDarkAccent,
                     fontWeight: FontWeight.w500
@@ -46,11 +46,6 @@ class QuickListCard extends StatelessWidget {
                 )
               ]
             ),
-            Checkbox(
-              value: false,
-              onChanged: (bool? value) {
-              }
-            )
           ],
         )
       )
