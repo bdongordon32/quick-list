@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -14,12 +15,26 @@ class _NewListState extends State<NewList> {
   final listTextFieldController = TextEditingController();
   final titleController = TextEditingController();
 
+  FirebaseFirestore fireDb = FirebaseFirestore.instance;
+
   void convertTextToList() {
     String textFieldContent = listTextFieldController.text;
 
     if (textFieldContent.isEmpty) return;
 
     List<String> listItems = textFieldContent.split('\n');
+
+    // listItems, title, rawContent
+    Map<String, String> newQuickList = {
+      "title": titleController.text,
+      "rawContent": textFieldContent
+    };
+
+    fireDb.collection('lists')
+      .add(newQuickList)
+      .then((documentSnapshot) {
+        print('Hello');
+      });
   }
 
   @override

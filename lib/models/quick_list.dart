@@ -26,7 +26,7 @@ class QuickList {
   }
 
   String cardSubtitle() {
-    if (listItems!.isEmpty) {
+    if (listItems == null || listItems!.isEmpty) {
       return 'No items';
     }
 

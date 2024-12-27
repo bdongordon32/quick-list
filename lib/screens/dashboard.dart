@@ -16,7 +16,6 @@ class _DashboardState extends State<Dashboard> {
   List<QuickList> quickLists = [];
   // // late Future<List<QuickList>> quickLists;
   
-
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   void addNewList() {
@@ -30,21 +29,28 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
 
+    List<QuickList> documentItems = quickLists;
+
     fireDb.collection('lists').get()
       .then((event) {
         for (var doc in event.docs) {
           QuickList quickList = QuickList.fromSnapshot(doc);
+          List listItems = doc.data()['listItems'] ?? [];
 
-          for (var item in doc.get('listItems')) {
-            item.get()
-              .then((var listItemSnapshot) {
-                QuickListItem listItem = QuickListItem.fromSnapshot(listItemSnapshot);
-                quickList.addToListItems(listItem);
+          if (listItems.isEmpty) {
+            documentItems.add(quickList);
+            setState(() { quickLists = documentItems; });
+          } else {
+            for (var item in listItems) {
+              item.get()
+                .then((var listItemSnapshot) {
+                  QuickListItem listItem = QuickListItem.fromSnapshot(listItemSnapshot);
+                  quickList.addToListItems(listItem);
 
-                List<QuickList> documentItems = quickLists;
-                documentItems.add(quickList);
-                setState(() { quickLists = documentItems; });
-              });
+                  documentItems.add(quickList);
+                  setState(() { quickLists = documentItems; });
+                });
+            }
           }
         }
       });
