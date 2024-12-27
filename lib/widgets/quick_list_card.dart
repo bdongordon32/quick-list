@@ -9,35 +9,46 @@ class QuickListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-        border: Border.all(
-          color: primaryDarkAccent,
-          width: 2
-        )
-      ),
-      padding: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            quickList.title,
-            style: TextStyle(
-              fontSize: 20,
-              color: primaryDarkAccent,
-              fontWeight: FontWeight.w700
-            ),
-          ),
-          Text(
-            '3/8 items completed',
-            style: TextStyle(
-              color: primaryDarkAccent,
-              fontWeight: FontWeight.w500
-            ),
+
+    return InkWell(
+      onTap: () {
+        print("TAPPED CARD");
+        // quickList.completedSubtitle();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          border: Border.all(
+            color: primaryDarkAccent,
+            width: 2
           )
-        ]
-      ),
+        ),
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  quickList.title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: primaryDarkAccent,
+                    fontWeight: FontWeight.w700
+                  ),
+                ),
+                Text(
+                  quickList.cardSubtitle(),
+                  style: TextStyle(
+                    color: primaryDarkAccent,
+                    fontWeight: FontWeight.w500
+                  ),
+                )
+              ]
+            ),
+          ],
+        )
+      )
     );
   }
 }

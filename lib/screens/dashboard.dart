@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
 
@@ -12,8 +13,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<QuickList> listItems = [];
-  // // late Future<List<QuickList>> listItems;
+  List<QuickList> quickLists = [];
+  // // late Future<List<QuickList>> quickLists;
   
 
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
@@ -32,11 +33,19 @@ class _DashboardState extends State<Dashboard> {
     fireDb.collection('lists').get()
       .then((event) {
         for (var doc in event.docs) {
-          QuickList listItem = QuickList.fromSnapshot(doc);
-          List<QuickList> documentItems = listItems;
-          documentItems.add(listItem);
-          
-          setState(() { listItems = documentItems; });
+          QuickList quickList = QuickList.fromSnapshot(doc);
+
+          for (var item in doc.get('listItems')) {
+            item.get()
+              .then((var listItemSnapshot) {
+                QuickListItem listItem = QuickListItem.fromSnapshot(listItemSnapshot);
+                quickList.addToListItems(listItem);
+
+                List<QuickList> documentItems = quickLists;
+                documentItems.add(quickList);
+                setState(() { quickLists = documentItems; });
+              });
+          }
         }
       });
   }
@@ -47,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text('Dashboard'),
       ),
-      body: QuickListContainer(listItems),
+      body: QuickListContainer(quickLists),
       floatingActionButton: FloatingActionButton(
         onPressed: addNewList,
         child: Icon(
