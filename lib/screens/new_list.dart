@@ -33,17 +33,20 @@ class _NewListState extends State<NewList> {
     fireDb.collection('lists')
       .add(newQuickList)
       .then((documentSnapshot) {
-        for (var item in listItems) {
-          documentSnapshot
-          .collection('listItems')
-          .add({
-            "description": item,
-            "completed": false
-          });
-        }
-        // documentSnapshot.set({
-        //   listItems 
-        // });
+        fireDb.runTransaction((transaction) async {
+            for (var item in listItems) {
+            documentSnapshot
+              .collection('list-items')
+              .add({
+                "description": item,
+                "completed": false
+              });
+          }
+        })
+        .then((value) {
+          print(value);
+          if (mounted) { Navigator.of(context).pop(); }
+        });
       });
   }
 

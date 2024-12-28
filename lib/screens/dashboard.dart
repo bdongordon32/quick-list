@@ -46,8 +46,8 @@ class _DashboardState extends State<Dashboard> {
                 for (var item in listItemSnapshot.docs) {
                   QuickListItem listItem = QuickListItem.fromSnapshot(item);
                   quickList.addToListItems(listItem);
-                  documentItems.add(quickList);
                 }
+                documentItems.add(quickList);
               }
 
               setState(() {
