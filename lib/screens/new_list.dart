@@ -25,15 +25,25 @@ class _NewListState extends State<NewList> {
     List<String> listItems = textFieldContent.split('\n');
 
     // listItems, title, rawContent
-    Map<String, String> newQuickList = {
+    Map<String, dynamic> newQuickList = {
       "title": titleController.text,
-      "rawContent": textFieldContent
+      "rawContent": textFieldContent,
     };
 
     fireDb.collection('lists')
       .add(newQuickList)
       .then((documentSnapshot) {
-        print('Hello');
+        for (var item in listItems) {
+          documentSnapshot
+          .collection('listItems')
+          .add({
+            "description": item,
+            "completed": false
+          });
+        }
+        // documentSnapshot.set({
+        //   listItems 
+        // });
       });
   }
 
