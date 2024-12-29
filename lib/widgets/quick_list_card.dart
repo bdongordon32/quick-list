@@ -26,31 +26,35 @@ class QuickListCard extends StatelessWidget {
           )
         ),
         padding: EdgeInsets.all(8),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Text(
+              quickList.title,
+              style: TextStyle(
+                fontSize: 20,
+                color: primaryDarkAccent,
+                fontWeight: FontWeight.w700
+              ),
+            ),
+            Text(
+              quickList.cardSubtitle(),
+              style: TextStyle(
+                color: primaryDarkAccent,
+                fontWeight: FontWeight.w500
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  quickList.title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: primaryDarkAccent,
-                    fontWeight: FontWeight.w700
-                  ),
+                  createdAtLabel,
+                  style: TextStyle(fontSize: 12),
                 ),
-                Text(
-                  quickList.cardSubtitle(),
-                  style: TextStyle(
-                    color: primaryDarkAccent,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                Text(createdAtLabel)
-              ]
+              ],
             ),
-          ],
-        )
+          ]
+        ),
       )
     );
   }
