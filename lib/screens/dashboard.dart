@@ -112,6 +112,7 @@ class _DashboardState extends State<Dashboard> {
             DashboardBar(
               sortMode: sortMode,
               onToggleSort: _toggleSort,
+              quickListCount: quickLists.length,
             ),
             Padding(padding: EdgeInsets.all(2)),
             Expanded(
