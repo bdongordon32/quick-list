@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickList {
+  final String id;
   final String title;
   final String rawContent;
   List<dynamic>? listItems;
 
   QuickList({
-    this.title = '',
+    required this.id,
+    required this.title,
     this.rawContent = '',
     this.listItems
   });
@@ -15,8 +17,9 @@ class QuickList {
     final data = snapshot.data();
 
     return QuickList(
+      id:    snapshot.id,
       title: data?['title'],
-      rawContent: data?['rawContent'],
+      rawContent: data?['rawContent']
     );
   }
 

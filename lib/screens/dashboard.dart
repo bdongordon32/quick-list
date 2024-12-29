@@ -18,21 +18,43 @@ class _DashboardState extends State<Dashboard> {
   
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
-  void addNewList() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const NewList()),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
 
-    List<QuickList> documentItems = quickLists;
+    _fetchQuickLists();
+  }
 
-    fireDb.collection('lists').get()
-      .then((event) {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: QuickListContainer(quickLists),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => addNewList(context),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  void _fetchQuickLists() {
+    List<QuickList> documentItems = quickLists;
+    Iterable<String?> documentIds = documentItems.map((item) => item.id);
+
+    dynamic query;
+
+    if (documentIds.isEmpty) {
+      query = fireDb.collection('lists');
+    } else {
+      query = fireDb.collection('lists').where(FieldPath.documentId, whereNotIn: documentIds);
+    }
+
+    query.get().then((event) {
         for (var doc in event.docs) {
           String quickListId = doc.id;
 
@@ -58,20 +80,17 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-      ),
-      body: QuickListContainer(quickLists),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNewList,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+  Future<void> addNewList(BuildContext context) async {
+    final bool? newQuickListAdded = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NewList()),
     );
+
+    if (!context.mounted) return;
+    if (newQuickListAdded == null) return;
+
+    if (newQuickListAdded) {
+      _fetchQuickLists();
+    }
   }
 }
