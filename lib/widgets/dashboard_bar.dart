@@ -7,6 +7,10 @@ class DashboardBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IconData sortIcon = sortMode == 'descending' ?
+      Icons.arrow_downward_sharp :
+      Icons.arrow_upward_sharp;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -26,12 +30,11 @@ class DashboardBar extends StatelessWidget {
             children: [
               Text('Created By'),
               Padding(padding: EdgeInsets.only(left: 2, right: 2)),
-              Icon(Icons.arrow_downward_sharp)
+              Icon(sortIcon)
             ],
           )
         )
       ],
     );
   }
-
 }

@@ -44,27 +44,27 @@ class _DashboardState extends State<Dashboard> {
     }
 
     query.get().then((event) {
-        for (var doc in event.docs) {
-          String quickListId = doc.id;
+      for (var doc in event.docs) {
+        String quickListId = doc.id;
 
-          fireDb.collection('/lists/$quickListId/list-items').get()
-            .then((listItemSnapshot) {
-              QuickList quickList = QuickList.fromSnapshot(doc);
+        fireDb.collection('/lists/$quickListId/list-items').get()
+          .then((listItemSnapshot) {
+            QuickList quickList = QuickList.fromSnapshot(doc);
 
-              if (listItemSnapshot.docs.isEmpty) {
-                documentItems.add(quickList);
-              } else {
-                for (var item in listItemSnapshot.docs) {
-                  QuickListItem listItem = QuickListItem.fromSnapshot(item);
-                  quickList.addToListItems(listItem);
-                }
-                documentItems.add(quickList);
+            if (listItemSnapshot.docs.isEmpty) {
+              documentItems.add(quickList);
+            } else {
+              for (var item in listItemSnapshot.docs) {
+                QuickListItem listItem = QuickListItem.fromSnapshot(item);
+                quickList.addToListItems(listItem);
               }
+              documentItems.add(quickList);
+            }
 
-              setState(() {
-                quickLists = documentItems;
-              });
+            setState(() {
+              quickLists = documentItems;
             });
+          });
         }
       });
   }
