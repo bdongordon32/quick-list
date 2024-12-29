@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/app_theme.dart';
 
 class DashboardBar extends StatelessWidget {
   const DashboardBar({
@@ -21,7 +22,15 @@ class DashboardBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Expanded(child: Text('List Count: $quickListCount'),),
+        Expanded(
+          child: Text(
+            'List Count: $quickListCount',
+            style: TextStyle(
+              color: primaryDarkAccent,
+              fontWeight: FontWeight.bold
+            ),
+          )
+        ),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(

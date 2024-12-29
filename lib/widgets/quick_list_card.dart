@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 
@@ -9,10 +10,12 @@ class QuickListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime createdAtDate = quickList.createdAt.toDate();
+    final String createdAtLabel = DateFormat('MMM dd, yy hh:mm').format(createdAtDate);
+
     return InkWell(
       onTap: () {
         print("TAPPED CARD");
-        // quickList.completedSubtitle();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -43,7 +46,7 @@ class QuickListCard extends StatelessWidget {
                     fontWeight: FontWeight.w500
                   ),
                 ),
-                Text(quickList.createdAt.toDate().toIso8601String())
+                Text(createdAtLabel)
               ]
             ),
           ],
