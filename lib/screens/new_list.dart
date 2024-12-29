@@ -23,10 +23,11 @@ class _NewListState extends State<NewList> {
     if (textFieldContent.isEmpty) return;
 
     List<String> listItems = textFieldContent.split('\n');
+    String title = titleController.text;
 
     // listItems, title, rawContent
     Map<String, dynamic> newQuickList = {
-      "title": titleController.text,
+      "title": title,
       "rawContent": textFieldContent,
     };
 
@@ -44,8 +45,12 @@ class _NewListState extends State<NewList> {
           }
         })
         .then((value) {
-          print(value);
-          if (mounted) { Navigator.of(context).pop(); }
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Quick list has been added'))
+            );
+            Navigator.of(context).pop(true);
+          }
         });
       });
   }
