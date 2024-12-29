@@ -4,7 +4,7 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
-import 'package:quick_list/widgets/sort_bar.dart';
+import 'package:quick_list/widgets/dashboard_bar.dart';
 
 // ignore: non_constant_identifier_names
 Map<String, String> CREATED_AT_SORT_MODES = {
@@ -89,13 +89,22 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text('Dashboard'),
       ),
-      body: Column(
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          top: 4,
+          bottom: 8
+        ),
+        child: Column(
         children: [
-          SortBar(sortMode: sortMode),
-          Expanded(
-            child: QuickListContainer(quickLists)
-          )
-        ],
+            DashboardBar(sortMode: sortMode),
+            Padding(padding: EdgeInsets.all(2)),
+            Expanded(
+              child: QuickListContainer(quickLists)
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addNewList(context),
