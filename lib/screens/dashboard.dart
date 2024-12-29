@@ -4,6 +4,13 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
+import 'package:quick_list/widgets/dashboard_bar.dart';
+
+// ignore: non_constant_identifier_names
+Map<String, String> CREATED_AT_SORT_MODES = {
+  'descending': 'descending',
+  'ascending':  'ascending'
+};
 
 class Dashboard extends StatefulWidget {
   const Dashboard({ super.key });
@@ -14,9 +21,71 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   List<QuickList> quickLists = [];
-  // // late Future<List<QuickList>> quickLists;
-  
-  FirebaseFirestore fireDb = FirebaseFirestore.instance;
+  String sortMode = CREATED_AT_SORT_MODES['descending']!;
+  FirebaseFirestore fireDb   = FirebaseFirestore.instance;
+
+  void _fetchQuickLists() {
+    List<QuickList> documentItems = [];
+
+    fireDb.collection('lists').get().then((event) {
+      for (var doc in event.docs) {
+        String quickListId = doc.id;
+        QuickList quickList = QuickList.fromSnapshot(doc);
+
+        fireDb.collection('/lists/$quickListId/list-items').get()
+          .then((listItemSnapshot) {
+            if (listItemSnapshot.docs.isNotEmpty) {
+              for (var item in listItemSnapshot.docs) {
+                QuickListItem listItem = QuickListItem.fromSnapshot(item);
+                quickList.addToListItems(listItem);
+              }
+            }
+
+            documentItems.add(quickList);
+
+            if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+              documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            } else {
+              documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+            }
+
+            setState(() {
+              quickLists = documentItems;
+            });
+          });
+        }
+      });
+  }
+
+  Future<void> _addNewList(BuildContext context) async {
+    final bool? newQuickListAdded = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NewList()),
+    );
+
+    if (!context.mounted) return;
+    if (newQuickListAdded == null) return;
+
+    if (newQuickListAdded) {
+      _fetchQuickLists();
+    }
+  }
+
+  void _toggleSort() {
+    List<QuickList> documentItems = quickLists;
+
+    if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+      setState(() => sortMode = 'ascending');
+      documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    } else {
+      setState(() => sortMode = 'descending');
+      documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    }
+
+    setState(() {
+      quickLists = documentItems;
+    });
+  }
 
   @override
   void initState() {
@@ -31,9 +100,29 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: Text('Dashboard'),
       ),
-      body: QuickListContainer(quickLists),
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          top: 4,
+          bottom: 8
+        ),
+        child: Column(
+        children: [
+            DashboardBar(
+              sortMode: sortMode,
+              onToggleSort: _toggleSort,
+              quickListCount: quickLists.length,
+            ),
+            Padding(padding: EdgeInsets.all(2)),
+            Expanded(
+              child: QuickListContainer(quickLists)
+            )
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => addNewList(context),
+        onPressed: () => _addNewList(context),
         child: Icon(
           Icons.add,
           color: Colors.white,
@@ -42,55 +131,4 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void _fetchQuickLists() {
-    List<QuickList> documentItems = quickLists;
-    Iterable<String?> documentIds = documentItems.map((item) => item.id);
-
-    dynamic query;
-
-    if (documentIds.isEmpty) {
-      query = fireDb.collection('lists');
-    } else {
-      query = fireDb.collection('lists').where(FieldPath.documentId, whereNotIn: documentIds);
-    }
-
-    query.get().then((event) {
-        for (var doc in event.docs) {
-          String quickListId = doc.id;
-
-          fireDb.collection('/lists/$quickListId/list-items').get()
-            .then((listItemSnapshot) {
-              QuickList quickList = QuickList.fromSnapshot(doc);
-
-              if (listItemSnapshot.docs.isEmpty) {
-                documentItems.add(quickList);
-              } else {
-                for (var item in listItemSnapshot.docs) {
-                  QuickListItem listItem = QuickListItem.fromSnapshot(item);
-                  quickList.addToListItems(listItem);
-                }
-                documentItems.add(quickList);
-              }
-
-              setState(() {
-                quickLists = documentItems;
-              });
-            });
-        }
-      });
-  }
-
-  Future<void> addNewList(BuildContext context) async {
-    final bool? newQuickListAdded = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const NewList()),
-    );
-
-    if (!context.mounted) return;
-    if (newQuickListAdded == null) return;
-
-    if (newQuickListAdded) {
-      _fetchQuickLists();
-    }
-  }
 }

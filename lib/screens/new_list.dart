@@ -27,8 +27,9 @@ class _NewListState extends State<NewList> {
 
     // listItems, title, rawContent
     Map<String, dynamic> newQuickList = {
-      "title": title,
-      "rawContent": textFieldContent,
+      'title': title,
+      'rawContent': textFieldContent,
+      'createdAt': FieldValue.serverTimestamp()
     };
 
     fireDb.collection('lists')
@@ -39,8 +40,8 @@ class _NewListState extends State<NewList> {
             documentSnapshot
               .collection('list-items')
               .add({
-                "description": item,
-                "completed": false
+                'description': item,
+                'completed': false
               });
           }
         })

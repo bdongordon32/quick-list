@@ -4,11 +4,13 @@ class QuickList {
   final String id;
   final String title;
   final String rawContent;
+  final Timestamp createdAt;
   List<dynamic>? listItems;
 
   QuickList({
     required this.id,
     required this.title,
+    required this.createdAt,
     this.rawContent = '',
     this.listItems
   });
@@ -19,7 +21,8 @@ class QuickList {
     return QuickList(
       id:    snapshot.id,
       title: data?['title'],
-      rawContent: data?['rawContent']
+      rawContent: data?['rawContent'],
+      createdAt: data?['createdAt']
     );
   }
 
