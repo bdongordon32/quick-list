@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/screens/show_list.dart';
 
 class QuickListCard extends StatelessWidget {
   const QuickListCard(this.quickList, { super.key });
@@ -15,7 +16,10 @@ class QuickListCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        print("TAPPED CARD");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ShowList(quickList)),
+        );
       },
       child: Container(
         decoration: BoxDecoration(

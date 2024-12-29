@@ -108,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
           bottom: 8
         ),
         child: Column(
-        children: [
+          children: [
             DashboardBar(
               sortMode: sortMode,
               onToggleSort: _toggleSort,
