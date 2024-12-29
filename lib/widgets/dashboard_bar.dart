@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class DashboardBar extends StatelessWidget {
-  const DashboardBar({ super.key, required this.sortMode });
+  const DashboardBar({
+    super.key,
+    required this.sortMode,
+    required this.onToggleSort
+  });
 
   final String sortMode;
+  final Function()? onToggleSort;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,8 @@ class DashboardBar extends StatelessWidget {
             )
           ),
           onPressed: () {
-            print('Change sort');
+            print('pressed');
+            onToggleSort!();
           },
           child: Row(
             children: [
