@@ -23,27 +23,35 @@ class _NewListState extends State<NewList> {
     if (textFieldContent.isEmpty) return;
 
     List<String> listItems = textFieldContent.split('\n');
+    String title = titleController.text;
 
     // listItems, title, rawContent
     Map<String, dynamic> newQuickList = {
-      "title": titleController.text,
+      "title": title,
       "rawContent": textFieldContent,
     };
 
     fireDb.collection('lists')
       .add(newQuickList)
       .then((documentSnapshot) {
-        for (var item in listItems) {
-          documentSnapshot
-          .collection('listItems')
-          .add({
-            "description": item,
-            "completed": false
-          });
-        }
-        // documentSnapshot.set({
-        //   listItems 
-        // });
+        fireDb.runTransaction((transaction) async {
+            for (var item in listItems) {
+            documentSnapshot
+              .collection('list-items')
+              .add({
+                "description": item,
+                "completed": false
+              });
+          }
+        })
+        .then((value) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Quick list has been added'))
+            );
+            Navigator.of(context).pop(true);
+          }
+        });
       });
   }
 
