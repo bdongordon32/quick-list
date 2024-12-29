@@ -9,7 +9,6 @@ class QuickListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: () {
         print("TAPPED CARD");
@@ -43,7 +42,8 @@ class QuickListCard extends StatelessWidget {
                     color: primaryDarkAccent,
                     fontWeight: FontWeight.w500
                   ),
-                )
+                ),
+                Text(quickList.createdAt.toDate().toIso8601String())
               ]
             ),
           ],

@@ -35,31 +35,34 @@ class _DashboardState extends State<Dashboard> {
     List<QuickList> documentItems = quickLists;
     Iterable<String?> documentIds = documentItems.map((item) => item.id);
 
-    dynamic query;
+    // dynamic query;
+    dynamic baseQuery = fireDb.collection('lists')
+      .orderBy('createdAt', descending: true);
 
-    if (documentIds.isEmpty) {
-      query = fireDb.collection('lists');
-    } else {
-      query = fireDb.collection('lists').where(FieldPath.documentId, whereNotIn: documentIds);
+    if (documentIds.isNotEmpty) {
+      baseQuery = baseQuery.where(FieldPath.documentId, whereNotIn: documentIds);
     }
 
-    query.get().then((event) {
+    baseQuery.get().then((event) {
       for (var doc in event.docs) {
         String quickListId = doc.id;
+        QuickList quickList = QuickList.fromSnapshot(doc);
 
         fireDb.collection('/lists/$quickListId/list-items').get()
           .then((listItemSnapshot) {
-            QuickList quickList = QuickList.fromSnapshot(doc);
 
-            if (listItemSnapshot.docs.isEmpty) {
-              documentItems.add(quickList);
-            } else {
+            // if (listItemSnapshot.docs.isEmpty) {
+            //   documentItems.add(quickList);
+            // } else {
+            if (listItemSnapshot.docs.isNotEmpty) {
               for (var item in listItemSnapshot.docs) {
                 QuickListItem listItem = QuickListItem.fromSnapshot(item);
                 quickList.addToListItems(listItem);
               }
-              documentItems.add(quickList);
             }
+
+            documentItems.add(quickList);
+            // }
 
             setState(() {
               quickLists = documentItems;
