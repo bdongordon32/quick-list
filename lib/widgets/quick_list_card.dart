@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 
@@ -9,10 +10,12 @@ class QuickListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime createdAtDate = quickList.createdAt.toDate();
+    final String createdAtLabel = DateFormat('MMM dd, yy hh:mm').format(createdAtDate);
+
     return InkWell(
       onTap: () {
         print("TAPPED CARD");
-        // quickList.completedSubtitle();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -23,31 +26,35 @@ class QuickListCard extends StatelessWidget {
           )
         ),
         padding: EdgeInsets.all(8),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Text(
+              quickList.title,
+              style: TextStyle(
+                fontSize: 20,
+                color: primaryDarkAccent,
+                fontWeight: FontWeight.w700
+              ),
+            ),
+            Text(
+              quickList.cardSubtitle(),
+              style: TextStyle(
+                color: primaryDarkAccent,
+                fontWeight: FontWeight.w500
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  quickList.title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: primaryDarkAccent,
-                    fontWeight: FontWeight.w700
-                  ),
+                  createdAtLabel,
+                  style: TextStyle(fontSize: 12),
                 ),
-                Text(
-                  quickList.cardSubtitle(),
-                  style: TextStyle(
-                    color: primaryDarkAccent,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                Text(quickList.createdAt.toDate().toIso8601String())
-              ]
+              ],
             ),
-          ],
-        )
+          ]
+        ),
       )
     );
   }

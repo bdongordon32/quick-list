@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:quick_list/app_theme.dart';
 
 class DashboardBar extends StatelessWidget {
-  const DashboardBar({ super.key, required this.sortMode });
+  const DashboardBar({
+    super.key,
+    required this.sortMode,
+    required this.onToggleSort,
+    this.quickListCount = 0
+  });
 
   final String sortMode;
+  final Function()? onToggleSort;
+  final int quickListCount;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +22,15 @@ class DashboardBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        Expanded(
+          child: Text(
+            'List Count: $quickListCount',
+            style: TextStyle(
+              color: primaryDarkAccent,
+              fontWeight: FontWeight.bold
+            ),
+          )
+        ),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -24,11 +41,11 @@ class DashboardBar extends StatelessWidget {
             )
           ),
           onPressed: () {
-            print('Change sort');
+            onToggleSort!();
           },
           child: Row(
             children: [
-              Text('Created By'),
+              Text('Created By:'),
               Padding(padding: EdgeInsets.only(left: 2, right: 2)),
               Icon(sortIcon)
             ],

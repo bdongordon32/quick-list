@@ -24,36 +24,16 @@ class _DashboardState extends State<Dashboard> {
   String sortMode = CREATED_AT_SORT_MODES['descending']!;
   FirebaseFirestore fireDb   = FirebaseFirestore.instance;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _fetchQuickLists();
-  }
-
   void _fetchQuickLists() {
-    List<QuickList> documentItems = quickLists;
-    Iterable<String?> documentIds = documentItems.map((item) => item.id);
+    List<QuickList> documentItems = [];
 
-    // dynamic query;
-    dynamic baseQuery = fireDb.collection('lists')
-      .orderBy('createdAt', descending: true);
-
-    if (documentIds.isNotEmpty) {
-      baseQuery = baseQuery.where(FieldPath.documentId, whereNotIn: documentIds);
-    }
-
-    baseQuery.get().then((event) {
+    fireDb.collection('lists').get().then((event) {
       for (var doc in event.docs) {
         String quickListId = doc.id;
         QuickList quickList = QuickList.fromSnapshot(doc);
 
         fireDb.collection('/lists/$quickListId/list-items').get()
           .then((listItemSnapshot) {
-
-            // if (listItemSnapshot.docs.isEmpty) {
-            //   documentItems.add(quickList);
-            // } else {
             if (listItemSnapshot.docs.isNotEmpty) {
               for (var item in listItemSnapshot.docs) {
                 QuickListItem listItem = QuickListItem.fromSnapshot(item);
@@ -62,7 +42,12 @@ class _DashboardState extends State<Dashboard> {
             }
 
             documentItems.add(quickList);
-            // }
+
+            if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+              documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            } else {
+              documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+            }
 
             setState(() {
               quickLists = documentItems;
@@ -86,6 +71,29 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  void _toggleSort() {
+    List<QuickList> documentItems = quickLists;
+
+    if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+      setState(() => sortMode = 'ascending');
+      documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    } else {
+      setState(() => sortMode = 'descending');
+      documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    }
+
+    setState(() {
+      quickLists = documentItems;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchQuickLists();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +109,11 @@ class _DashboardState extends State<Dashboard> {
         ),
         child: Column(
         children: [
-            DashboardBar(sortMode: sortMode),
+            DashboardBar(
+              sortMode: sortMode,
+              onToggleSort: _toggleSort,
+              quickListCount: quickLists.length,
+            ),
             Padding(padding: EdgeInsets.all(2)),
             Expanded(
               child: QuickListContainer(quickLists)
