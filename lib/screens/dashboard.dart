@@ -33,37 +33,26 @@ class _DashboardState extends State<Dashboard> {
 
   void _fetchQuickLists() {
     List<QuickList> documentItems = [];
-    // Iterable<String?> documentIds = documentItems.map((item) => item.id);
 
-    // dynamic query;
-    dynamic baseQuery = fireDb.collection('lists')
-      .orderBy('createdAt', descending: true);
-
-    // if (documentIds.isNotEmpty) {
-      // baseQuery = baseQuery
-      // baseQuery = baseQuery.where(FieldPath.documentId, whereNotIn: documentIds);
-    // }
-
-    baseQuery.get().then((event) {
+    fireDb.collection('lists').get().then((event) {
       for (var doc in event.docs) {
         String quickListId = doc.id;
         QuickList quickList = QuickList.fromSnapshot(doc);
 
         fireDb.collection('/lists/$quickListId/list-items').get()
           .then((listItemSnapshot) {
-
-            // if (listItemSnapshot.docs.isEmpty) {
-            //   documentItems.add(quickList);
-            // } else {
-            // if (listItemSnapshot.docs.isNotEmpty) {
-            //   for (var item in listItemSnapshot.docs) {
-            //     QuickListItem listItem = QuickListItem.fromSnapshot(item);
-            //     quickList.addToListItems(listItem);
-            //   }
-            // }
+            if (listItemSnapshot.docs.isNotEmpty) {
+              for (var item in listItemSnapshot.docs) {
+                QuickListItem listItem = QuickListItem.fromSnapshot(item);
+                quickList.addToListItems(listItem);
+              }
+            }
 
             documentItems.add(quickList);
-            // }
+            // Descending Order
+            documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            // Ascending Order
+            // documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
             setState(() {
               quickLists = documentItems;
