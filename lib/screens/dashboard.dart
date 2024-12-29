@@ -4,6 +4,13 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list_container.dart';
+import 'package:quick_list/widgets/sort_bar.dart';
+
+// ignore: non_constant_identifier_names
+Map<String, String> CREATED_AT_SORT_MODES = {
+  'descending': 'descending',
+  'ascending':  'ascending'
+};
 
 class Dashboard extends StatefulWidget {
   const Dashboard({ super.key });
@@ -14,32 +21,14 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   List<QuickList> quickLists = [];
-  // // late Future<List<QuickList>> quickLists;
-  
-  FirebaseFirestore fireDb = FirebaseFirestore.instance;
+  String sortMode = CREATED_AT_SORT_MODES['descending']!;
+  FirebaseFirestore fireDb   = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
 
     _fetchQuickLists();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-      ),
-      body: QuickListContainer(quickLists),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => addNewList(context),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-    );
   }
 
   void _fetchQuickLists() {
@@ -80,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
-  Future<void> addNewList(BuildContext context) async {
+  Future<void> _addNewList(BuildContext context) async {
     final bool? newQuickListAdded = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NewList()),
@@ -93,4 +82,29 @@ class _DashboardState extends State<Dashboard> {
       _fetchQuickLists();
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: Column(
+        children: [
+          SortBar(sortMode: sortMode),
+          Expanded(
+            child: QuickListContainer(quickLists)
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addNewList(context),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
 }
