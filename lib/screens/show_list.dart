@@ -38,6 +38,8 @@ class _ShowListState extends State<ShowList> {
 
     List<dynamic>? listItems = list.listItems;
 
+    FirebaseFirestore fireDb = FirebaseFirestore.instance;
+
     void saveTitle() {
       final String titleFieldText = titleFieldController.text;
 
@@ -84,6 +86,9 @@ class _ShowListState extends State<ShowList> {
                   ),
                   onPressed: null,
                   onLongPress: () {
+                    fireDb.collection('lists').doc(widget.quickList.id).delete()
+                      .then((res) {
+                      });
                   },
                   child: Icon(Icons.delete, size: 24,),
                 ),

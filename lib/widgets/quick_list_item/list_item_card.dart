@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/text_input.dart';
@@ -13,6 +14,8 @@ class ListItemCard extends StatefulWidget {
 
 class _ListItemCardState extends State<ListItemCard> {
   bool isCompleted = false;
+  
+  FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   @override
   void initState() {
