@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
-import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -59,10 +58,8 @@ class _ShowListState extends State<ShowList> {
 
     return Scaffold(
       appBar: AppBar(
-        // title: Text(widget.quickList.title),
         title: Row(
           children: [
-            // Text(widget.quickList.title),
             Expanded(
               child: TextInput(
                 label: 'Title',
@@ -86,6 +83,11 @@ class _ShowListState extends State<ShowList> {
                     iconColor: deleteButtonColor
                   ),
                   onPressed: () {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Hold down to delete'), duration: Duration(milliseconds: 800))
+                      );
+                    }
                   },
                   onLongPress: () {
                     fireDb.collection('lists').doc(widget.quickList.id).delete()
@@ -95,9 +97,6 @@ class _ShowListState extends State<ShowList> {
                           Navigator.of(context).pop(true);
                         }
                     });
-                    // fireDb.collection('lists').doc(widget.quickList.id).delete()
-                    //   .then((res) {
-                    //   });
                   },
                   child: Icon(Icons.delete, size: 24,),
                 ),
@@ -115,8 +114,6 @@ class _ShowListState extends State<ShowList> {
               currentStep: completedListItemsCount,
               backgroundColor: progressBarBase,
               progressColor: progressBarCompleted,
-              semanticsLabel: 'Hi',
-              semanticsValue: 'Bye',
             ),
             Padding(padding: EdgeInsets.only(bottom: 8)),
             Text('$completedListItemsCount of $listItemsCount is completed'),
