@@ -87,6 +87,10 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  void _doSomething() {
+    print("Something");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +120,10 @@ class _DashboardState extends State<Dashboard> {
             ),
             Padding(padding: EdgeInsets.all(2)),
             Expanded(
-              child: ListsContainer(quickLists)
+              child: ListsContainer(
+                quickLists,
+                callback: () => _fetchQuickLists()
+              )
             )
           ],
         ),

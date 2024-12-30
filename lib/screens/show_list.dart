@@ -8,9 +8,10 @@ import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class ShowList extends StatefulWidget {
-  const ShowList(this.quickList, {super.key});
+  const ShowList(this.quickList, {super.key, required this.callback});
 
   final QuickList quickList;
+  final Function() callback;
 
   @override
   State<ShowList> createState() => _ShowListState();
@@ -84,11 +85,19 @@ class _ShowListState extends State<ShowList> {
                   style: TextButton.styleFrom(
                     iconColor: deleteButtonColor
                   ),
-                  onPressed: null,
+                  onPressed: () {
+                  },
                   onLongPress: () {
                     fireDb.collection('lists').doc(widget.quickList.id).delete()
                       .then((res) {
-                      });
+                        if (context.mounted) {
+                          widget.callback();
+                          Navigator.of(context).pop(true);
+                        }
+                    });
+                    // fireDb.collection('lists').doc(widget.quickList.id).delete()
+                    //   .then((res) {
+                    //   });
                   },
                   child: Icon(Icons.delete, size: 24,),
                 ),

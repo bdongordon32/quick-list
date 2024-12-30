@@ -5,9 +5,10 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/screens/show_list.dart';
 
 class ListCard extends StatelessWidget {
-  const ListCard(this.quickList, { super.key });
+  const ListCard(this.quickList, { super.key, required this.callback });
 
   final QuickList quickList;
+  final Function() callback;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ListCard extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ShowList(quickList)),
+          MaterialPageRoute(builder: (context) => ShowList(quickList, callback: callback)),
         );
       },
       child: Container(
