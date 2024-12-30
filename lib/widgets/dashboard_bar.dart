@@ -23,11 +23,14 @@ class DashboardBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Expanded(
-          child: Text(
-            'List Count: $quickListCount',
-            style: TextStyle(
-              color: primaryDarkAccent,
-              fontWeight: FontWeight.bold
+          child: Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Text(
+              'List Count: $quickListCount',
+              style: TextStyle(
+                color: primaryDarkAccent,
+                fontWeight: FontWeight.bold
+              ),
             ),
           )
         ),
