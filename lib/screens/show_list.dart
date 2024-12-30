@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -26,7 +27,6 @@ class _ShowListState extends State<ShowList> {
     super.initState();
 
     titleFieldController.text = widget.quickList.title;
-    titleFieldController.text = widget.quickList.title;
   }
 
   @override
@@ -34,24 +34,23 @@ class _ShowListState extends State<ShowList> {
     QuickList list = widget.quickList;
     int listItemsCount = list.listItems?.length ?? 0;
     int completedListItemsCount = list.listItems!.where((item) => item.completed).length;
-    final String listTitle = list.title;
     final String listId = list.id;
 
+    List<dynamic>? listItems = list.listItems;
+
     void saveTitle() {
-      fireDb.collection('list').doc(listId)
-        .set({ 'title': titleFieldController.text })
+      final String titleFieldText = titleFieldController.text;
+
+      fireDb.collection('lists').doc(listId)
+        .set({ 'title': titleFieldText }, SetOptions(merge: true))
         .then((event) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Title has been saved'))
             );
-            setState(() {
-              isTitleChanged = false;
-            });
+            setState(() { isTitleChanged = false; });
+            list.setTitle(titleFieldText);
           }
-        })
-        .catchError((err) {
-          print(err);
         });
     }
 
@@ -94,7 +93,7 @@ class _ShowListState extends State<ShowList> {
             ),
             Padding(padding: EdgeInsets.only(bottom: 8)),
             Text('$completedListItemsCount of $listItemsCount is completed'),
-            ListItemsContainer()
+            ListItemsContainer(listItems)
           ],
         ),
       )
