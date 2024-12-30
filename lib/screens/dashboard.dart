@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/screens/new_list.dart';
-import 'package:quick_list/widgets/quick_list_container.dart';
+import 'package:quick_list/widgets/quick_list/quick_list_container.dart';
 import 'package:quick_list/widgets/dashboard_bar.dart';
 
 // ignore: non_constant_identifier_names
