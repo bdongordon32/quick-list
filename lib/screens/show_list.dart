@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
