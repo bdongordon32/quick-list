@@ -44,7 +44,9 @@ class _ListItemCardState extends State<ListItemCard> {
             }
           }
         ),
-        Text(widget.listItem.description)
+        Flexible(
+          child: Text(widget.listItem.description, overflow: TextOverflow.clip)
+        )
       ]
     );
   }
