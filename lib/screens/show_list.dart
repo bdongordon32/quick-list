@@ -72,16 +72,20 @@ class _ShowListState extends State<ShowList> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.check),
+              icon: const Icon(Icons.check, size: 24,),
               disabledColor: appBarLabelColor,
               onPressed: isTitleChanged ? saveTitle : null,
             ),
             Stack(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  disabledColor: appBarLabelColor,
-                  onPressed: () {}
+                TextButton(
+                  style: TextButton.styleFrom(
+                    iconColor: deleteButtonColor
+                  ),
+                  onPressed: null,
+                  onLongPress: () {
+                  },
+                  child: Icon(Icons.delete, size: 24,),
                 ),
               ],
             )
