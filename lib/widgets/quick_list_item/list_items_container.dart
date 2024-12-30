@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 
 class ListItemsContainer extends StatelessWidget {
@@ -13,7 +12,6 @@ class ListItemsContainer extends StatelessWidget {
       return Text('No list items');
     }
 
-    // return Text('hello');
     return Expanded(
       child: ListView.separated(
         itemCount: listItems!.length,

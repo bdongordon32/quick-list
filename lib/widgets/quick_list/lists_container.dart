@@ -13,9 +13,8 @@ class ListsContainer extends StatelessWidget {
     return Center(
       child: quickLists.isEmpty ?
         EmptyListCard() :
-        ListView.separated(
+        ListView.builder(
           itemCount: quickLists.length,
-          separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
           itemBuilder: (BuildContext context, int index) => ListCard(quickLists[index]),
         ),
     );

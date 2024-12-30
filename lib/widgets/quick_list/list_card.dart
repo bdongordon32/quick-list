@@ -14,8 +14,11 @@ class ListCard extends StatelessWidget {
     final DateTime createdAtDate = quickList.createdAt.toDate();
     final String createdAtLabel = DateFormat('MMM dd, yy hh:mm').format(createdAtDate);
 
-    return InkWell(
-      onTap: () {
+    return TextButton(
+      onLongPress: () {
+        print('Waybe');
+      },
+      onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ShowList(quickList)),
