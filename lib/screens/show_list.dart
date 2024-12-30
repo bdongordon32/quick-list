@@ -21,7 +21,6 @@ class _ShowListState extends State<ShowList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     titleFieldController.text = widget.quickList.title;
@@ -34,6 +33,12 @@ class _ShowListState extends State<ShowList> {
     int listItemsCount = list.listItems?.length ?? 0;
     int completedListItemsCount = list.listItems!.where((item) => item.completed).length;
     final String listTitle = list.title;
+
+    void enableTitleSave() {
+      setState(() {
+        isTitleChanged = true;
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -49,17 +54,14 @@ class _ShowListState extends State<ShowList> {
                 textStyle: TextStyle(color: primaryLightAccent),
                 labelStyle: TextStyle(color: appBarLabelColor),
                 onChanged: () {
-                  setState(() {
-                    isTitleChanged = true;
-                  });
+                  setState(() { isTitleChanged = true; });
                 },
               ),
             ),
             IconButton(
-              onPressed: () {
-
-              },
-              icon: const Icon(Icons.edit)
+              icon: const Icon(Icons.check),
+              disabledColor: appBarLabelColor,
+              onPressed: isTitleChanged ? enableTitleSave : null,
             ),
           ],
         ),

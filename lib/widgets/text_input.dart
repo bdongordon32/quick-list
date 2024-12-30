@@ -36,6 +36,7 @@ class TextInput extends StatelessWidget {
   void handleOnChange(String value) {
     if (onChanged == null) { return; }
 
+    onChanged!();
   }
 
   @override
