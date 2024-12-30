@@ -3,6 +3,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
+import 'package:quick_list/widgets/text_input.dart';
 
 class ShowList extends StatefulWidget {
   const ShowList(this.quickList, {super.key});
@@ -14,16 +15,54 @@ class ShowList extends StatefulWidget {
 }
 
 class _ShowListState extends State<ShowList> {
-  // const ShowList(this.quickList, {super.key});
+  bool isTitleChanged = false;
+
+  final titleFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    titleFieldController.text = widget.quickList.title;
+    titleFieldController.text = widget.quickList.title;
+  }
 
   @override
   Widget build(BuildContext context) {
-    int listItemsCount = widget.quickList.listItems?.length ?? 0;
-    int completedListItemsCount = widget.quickList.listItems!.where((item) => item.completed).length;
+    QuickList list = widget.quickList;
+    int listItemsCount = list.listItems?.length ?? 0;
+    int completedListItemsCount = list.listItems!.where((item) => item.completed).length;
+    final String listTitle = list.title;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.quickList.title),
+        // title: Text(widget.quickList.title),
+        title: Row(
+          children: [
+            // Text(widget.quickList.title),
+            Expanded(
+              child: TextInput(
+                label: 'Title',
+                defaultValue: 'Hleoo',
+                inputController: titleFieldController,
+                textStyle: TextStyle(color: primaryLightAccent),
+                labelStyle: TextStyle(color: appBarLabelColor),
+                onChanged: () {
+                  setState(() {
+                    isTitleChanged = true;
+                  });
+                },
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+
+              },
+              icon: const Icon(Icons.edit)
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
