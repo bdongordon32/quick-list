@@ -3,8 +3,8 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/widgets/empty_quick_list_card.dart';
 import 'package:quick_list/widgets/quick_list/list_card.dart';
 
-class ListContainer extends StatelessWidget {
-  const ListContainer(this.quickLists, { super.key });
+class ListsContainer extends StatelessWidget {
+  const ListsContainer(this.quickLists, { super.key });
 
   final List<QuickList> quickLists;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 
 class ShowList extends StatefulWidget {
   const ShowList(this.quickList, {super.key});
@@ -38,6 +39,7 @@ class _ShowListState extends State<ShowList> {
             ),
             Padding(padding: EdgeInsets.only(bottom: 8)),
             Text('$completedListItemsCount of $listItemsCount is completed'),
+            ListItemsContainer()
           ],
         ),
       )
