@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
@@ -18,6 +19,7 @@ class _ShowListState extends State<ShowList> {
   bool isTitleChanged = false;
 
   final titleFieldController = TextEditingController();
+  FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -33,11 +35,24 @@ class _ShowListState extends State<ShowList> {
     int listItemsCount = list.listItems?.length ?? 0;
     int completedListItemsCount = list.listItems!.where((item) => item.completed).length;
     final String listTitle = list.title;
+    final String listId = list.id;
 
-    void enableTitleSave() {
-      setState(() {
-        isTitleChanged = true;
-      });
+    void saveTitle() {
+      fireDb.collection('list').doc(listId)
+        .set({ 'title': titleFieldController.text })
+        .then((event) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Title has been saved'))
+            );
+            setState(() {
+              isTitleChanged = false;
+            });
+          }
+        })
+        .catchError((err) {
+          print(err);
+        });
     }
 
     return Scaffold(
@@ -49,7 +64,6 @@ class _ShowListState extends State<ShowList> {
             Expanded(
               child: TextInput(
                 label: 'Title',
-                defaultValue: 'Hleoo',
                 inputController: titleFieldController,
                 textStyle: TextStyle(color: primaryLightAccent),
                 labelStyle: TextStyle(color: appBarLabelColor),
@@ -61,7 +75,7 @@ class _ShowListState extends State<ShowList> {
             IconButton(
               icon: const Icon(Icons.check),
               disabledColor: appBarLabelColor,
-              onPressed: isTitleChanged ? enableTitleSave : null,
+              onPressed: isTitleChanged ? saveTitle : null,
             ),
           ],
         ),

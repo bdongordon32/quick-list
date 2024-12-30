@@ -42,7 +42,9 @@ class TextInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: (value) => handleOnChange(value),
+      onChanged: (value) {
+        handleOnChange(value);
+      },
       controller: inputController,
       minLines: minNoOfLines,
       maxLines: maxNoOfLines,
