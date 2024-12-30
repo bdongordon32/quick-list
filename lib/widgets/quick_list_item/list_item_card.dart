@@ -25,6 +25,7 @@ class _ListItemCardState extends State<ListItemCard> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Make API call to update the item list AFTER the state is set (no need to make the async request right now)
     return Row(
       children: [
         Checkbox(
