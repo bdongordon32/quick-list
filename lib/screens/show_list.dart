@@ -76,6 +76,15 @@ class _ShowListState extends State<ShowList> {
               disabledColor: appBarLabelColor,
               onPressed: isTitleChanged ? saveTitle : null,
             ),
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  disabledColor: appBarLabelColor,
+                  onPressed: () {}
+                ),
+              ],
+            )
           ],
         ),
       ),
