@@ -24,6 +24,7 @@ class DashboardBar extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
+            // TODO: Fix padding to be global inside of container
             padding: EdgeInsets.only(left: 12),
             child: Text(
               'List Count: $quickListCount',
