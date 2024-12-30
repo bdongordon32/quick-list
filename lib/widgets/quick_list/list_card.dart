@@ -4,8 +4,8 @@ import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/screens/show_list.dart';
 
-class QuickListCard extends StatelessWidget {
-  const QuickListCard(this.quickList, { super.key });
+class ListCard extends StatelessWidget {
+  const ListCard(this.quickList, { super.key });
 
   final QuickList quickList;
 

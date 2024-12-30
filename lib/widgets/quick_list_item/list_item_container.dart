@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
-class QuickListItemCard extends StatelessWidget {
-  const QuickListItemCard({ super.key });
+class ListItemContainer extends StatelessWidget {
+  const ListItemContainer({ super.key });
 
   @override
   Widget build(BuildContext context) {
