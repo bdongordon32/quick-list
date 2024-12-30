@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_list/app_theme.dart';
 
-class EmptyQuickListCard extends StatelessWidget {
-  const EmptyQuickListCard({super.key});
+class EmptyListCard extends StatelessWidget {
+  const EmptyListCard({super.key});
 
   final String emptyText = 'No lists have been created. Click “+” below to add a new one';
 

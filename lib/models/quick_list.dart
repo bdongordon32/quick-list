@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickList {
   final String id;
-  final String title;
+  String title;
   final String rawContent;
   final Timestamp createdAt;
   List<dynamic>? listItems;
@@ -29,6 +29,10 @@ class QuickList {
   void addToListItems(listItem) {
     listItems ??= [];
     listItems!.add(listItem);
+  }
+
+  void setTitle(listTitle) {
+    title = listTitle;
   }
 
   String cardSubtitle() {
