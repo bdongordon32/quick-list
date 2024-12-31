@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 final Color primaryDarkAccent = Color(0xFF5D6B85);
 final Color primaryLightAccent = Color(0xFFE8EEFF);
 
-final Color deleteButtonColor = Color.fromARGB(255, 205, 161, 176);
+final Color deleteButtonColor = Color.fromARGB(255, 151, 73, 73);
 
 final Color appBarLabelColor = Color.fromARGB(255, 176, 194, 244);
 

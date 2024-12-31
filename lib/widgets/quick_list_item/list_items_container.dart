@@ -13,10 +13,9 @@ class ListItemsContainer extends StatelessWidget {
     }
 
     return Expanded(
-      child: ListView.separated(
+      child: ListView.builder(
         itemCount: listItems!.length,
-        separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
-          itemBuilder: (BuildContext context, int index) => ListItemCard(listItems![index]),
+        itemBuilder: (BuildContext context, int index) => ListItemCard(listItems![index]),
       )
     );
   }
