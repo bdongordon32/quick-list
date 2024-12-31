@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 
 class ListItemsContainer extends StatelessWidget {
-  const ListItemsContainer(this.listItems, { super.key });
+  const ListItemsContainer(this.listItems, { super.key, required this.callback });
 
   final List<dynamic>? listItems;
+  final Function() callback;
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +14,12 @@ class ListItemsContainer extends StatelessWidget {
     }
 
     return Expanded(
-      child: ListView.separated(
+      child: ListView.builder(
         itemCount: listItems!.length,
-        separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
-          itemBuilder: (BuildContext context, int index) => ListItemCard(listItems![index]),
+        itemBuilder: (BuildContext context, int index) => ListItemCard(
+          listItems![index],
+          callback: callback,
+        ),
       )
     );
   }

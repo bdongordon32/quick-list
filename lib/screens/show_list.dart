@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
-import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class ShowList extends StatefulWidget {
-  const ShowList(this.quickList, {super.key});
+  const ShowList(this.quickList, {super.key, required this.callback});
 
   final QuickList quickList;
+  final Function() callback;
 
   @override
   State<ShowList> createState() => _ShowListState();
@@ -38,6 +38,8 @@ class _ShowListState extends State<ShowList> {
 
     List<dynamic>? listItems = list.listItems;
 
+    FirebaseFirestore fireDb = FirebaseFirestore.instance;
+
     void saveTitle() {
       final String titleFieldText = titleFieldController.text;
 
@@ -56,10 +58,8 @@ class _ShowListState extends State<ShowList> {
 
     return Scaffold(
       appBar: AppBar(
-        // title: Text(widget.quickList.title),
         title: Row(
           children: [
-            // Text(widget.quickList.title),
             Expanded(
               child: TextInput(
                 label: 'Title',
@@ -72,10 +72,36 @@ class _ShowListState extends State<ShowList> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.check),
+              icon: const Icon(Icons.check, size: 24,),
               disabledColor: appBarLabelColor,
               onPressed: isTitleChanged ? saveTitle : null,
             ),
+            Stack(
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    iconColor: deleteButtonColor
+                  ),
+                  onPressed: () {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Hold down to delete'), duration: Duration(milliseconds: 800))
+                      );
+                    }
+                  },
+                  onLongPress: () {
+                    fireDb.collection('lists').doc(widget.quickList.id).delete()
+                      .then((res) {
+                        if (context.mounted) {
+                          widget.callback();
+                          Navigator.of(context).pop(true);
+                        }
+                    });
+                  },
+                  child: Icon(Icons.delete, size: 24,),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -88,12 +114,10 @@ class _ShowListState extends State<ShowList> {
               currentStep: completedListItemsCount,
               backgroundColor: progressBarBase,
               progressColor: progressBarCompleted,
-              semanticsLabel: 'Hi',
-              semanticsValue: 'Bye',
             ),
             Padding(padding: EdgeInsets.only(bottom: 8)),
             Text('$completedListItemsCount of $listItemsCount is completed'),
-            ListItemsContainer(listItems)
+            ListItemsContainer(listItems, callback: widget.callback,)
           ],
         ),
       )

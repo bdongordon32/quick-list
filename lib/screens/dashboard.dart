@@ -36,7 +36,7 @@ class _DashboardState extends State<Dashboard> {
           .then((listItemSnapshot) {
             if (listItemSnapshot.docs.isNotEmpty) {
               for (var item in listItemSnapshot.docs) {
-                QuickListItem listItem = QuickListItem.fromSnapshot(item);
+                QuickListItem listItem = QuickListItem.fromSnapshot(item, quickListId: quickListId);
                 quickList.addToListItems(listItem);
               }
             }
@@ -116,7 +116,10 @@ class _DashboardState extends State<Dashboard> {
             ),
             Padding(padding: EdgeInsets.all(2)),
             Expanded(
-              child: ListsContainer(quickLists)
+              child: ListsContainer(
+                quickLists,
+                callback: () => _fetchQuickLists()
+              )
             )
           ],
         ),
