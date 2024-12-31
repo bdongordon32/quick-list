@@ -17,6 +17,16 @@ class _ListItemCardState extends State<ListItemCard> {
   
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
+  void _toggleCompletion({
+    required String quickListId,
+    required String listItemId,
+    required bool value
+  }) {
+    fireDb.collection('lists').doc(quickListId)
+      .collection('list-items').doc(listItemId)
+      .set({ 'completed': value }, SetOptions(merge: true));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +38,9 @@ class _ListItemCardState extends State<ListItemCard> {
 
   @override
   Widget build(BuildContext context) {
+    String listItemId = widget.listItem.id;
+    String quickListId = widget.listItem.quickListId;
+
     return Row(
       children: [
         Checkbox(
@@ -37,10 +50,12 @@ class _ListItemCardState extends State<ListItemCard> {
               setState(() {
                 isCompleted = true;
               });
+              _toggleCompletion(quickListId: quickListId, listItemId: listItemId, value: true);
             } else {
               setState(() {
                 isCompleted = false;
               });
+              _toggleCompletion(quickListId: quickListId, listItemId: listItemId, value: false);
             }
           }
         ),
