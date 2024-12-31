@@ -87,10 +87,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  void _doSomething() {
-    print("Something");
-  }
-
   @override
   void initState() {
     super.initState();

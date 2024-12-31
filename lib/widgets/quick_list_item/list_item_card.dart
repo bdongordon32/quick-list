@@ -4,9 +4,10 @@ import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class ListItemCard extends StatefulWidget {
-  const ListItemCard(this.listItem, {super.key});
+  const ListItemCard(this.listItem, {super.key, required this.callback});
 
   final QuickListItem listItem;
+  final Function() callback;
 
   @override
   State<ListItemCard> createState() => _ListItemCardState();
@@ -24,7 +25,8 @@ class _ListItemCardState extends State<ListItemCard> {
   }) {
     fireDb.collection('lists').doc(quickListId)
       .collection('list-items').doc(listItemId)
-      .set({ 'completed': value }, SetOptions(merge: true));
+      .set({ 'completed': value }, SetOptions(merge: true))
+      .then((onValue) => widget.callback());
   }
 
   @override
