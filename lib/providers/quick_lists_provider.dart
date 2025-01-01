@@ -13,9 +13,13 @@ class QuickListsProvider extends ChangeNotifier {
     return UnmodifiableListView(_lists);
   }
 
-  void addList(QuickList list, { bool notify = true }) {
+  void addList(QuickList list) {
     _lists.add(list);
+    notifyListeners();
+  }
 
+  void removeList(QuickList list) {
+    _lists.remove(list);
     notifyListeners();
   }
 

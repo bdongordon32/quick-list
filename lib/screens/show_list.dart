@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
-import 'package:quick_list/models/quick_list_item.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -75,6 +76,32 @@ class _ShowListState extends State<ShowList> {
               icon: const Icon(Icons.check),
               disabledColor: appBarLabelColor,
               onPressed: isTitleChanged ? saveTitle : null,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(iconColor: deleteButtonColor),
+              onPressed: () {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Hold down to delete'), duration: Duration(milliseconds: 800))
+                  );
+                }
+              },
+              onLongPress: () {
+                fireDb.collection('lists').doc(widget.quickList.id).delete()
+                  .then((res) {
+                    if (context.mounted) {
+                      Provider.of<QuickListsProvider>(
+                        context,
+                        listen: false
+                      ).removeList(widget.quickList);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Successfully deleted list'), duration: Duration(milliseconds: 800))
+                      );
+                      Navigator.of(context).pop();
+                    }
+                });
+              },
+              child: Icon(Icons.delete, size: 24,),
             ),
           ],
         ),
