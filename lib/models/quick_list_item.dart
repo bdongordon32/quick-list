@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickListItem {
   final String description;
-  final bool? completed;
+  final bool completed;
 
   const QuickListItem({
     this.description = '',

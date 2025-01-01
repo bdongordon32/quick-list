@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -25,24 +26,31 @@ class _NewListState extends State<NewList> {
 
     if (textFieldContent.isEmpty) return;
 
-    List<String> listItems = textFieldContent.split('\n');
+    List<String> parsedListItems = textFieldContent.split('\n');
     String title = titleController.text;
 
-    // listItems, title, rawContent
     Map<String, dynamic> newQuickList = {
       'title': title,
       'rawContent': textFieldContent,
       'createdAt': FieldValue.serverTimestamp()
     };
 
+    List<QuickListItem> listItems = [];
+
     fireDb.collection('lists')
       .add(newQuickList)
       .then((DocumentReference<Map<String, dynamic>> documentReference) {
         fireDb.runTransaction((transaction) async {
-          for (String description in listItems) {
+          for (String description in parsedListItems) {
+            QuickListItem item = QuickListItem(
+              description: description,
+              completed: false
+            );
+
             documentReference
               .collection('list-items')
-              .add({'description': description, 'completed': false});
+              .add({'description': item.description, 'completed': item.completed})
+              .then((_) => listItems.add(item));
           }
         })
         .then((_) {
@@ -53,6 +61,11 @@ class _NewListState extends State<NewList> {
                   const SnackBar(content: Text('Quick list has been added'))
                 );
                 QuickList list = QuickList.fromSnapshot(snapshot);
+
+                for (QuickListItem item in listItems) {
+                  list.addToListItems(item);
+                }
+
                 Provider.of<QuickListsProvider>(context, listen: false).addList(list);
                 Navigator.of(context).pop();
               }
