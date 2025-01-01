@@ -6,7 +6,6 @@ import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/new_list.dart';
 import 'package:quick_list/widgets/quick_list/list_card.dart';
-import 'package:quick_list/widgets/quick_list/lists_container.dart';
 import 'package:quick_list/widgets/dashboard_bar.dart';
 
 // ignore: non_constant_identifier_names
@@ -25,6 +24,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String sortMode = CREATED_AT_SORT_MODES['descending']!;
   FirebaseFirestore fireDb   = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchQuickLists();
+  }
 
   void _fetchQuickLists() {
     fireDb.collection('lists')
@@ -67,18 +73,6 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  // void _toggleSort() {
-  //   List<QuickList> documentItems = quickLists;
-
-  //   if (sortMode == CREATED_AT_SORT_MODES['descending']) {
-  //     setState(() => sortMode = 'ascending');
-  //     documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-  //   } else {
-  //     setState(() => sortMode = 'descending');
-  //     documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-  //   }
-  // }
-
   void _toggleSort() {
     setState(() {
       if (sortMode == CREATED_AT_SORT_MODES['descending']) {
@@ -89,18 +83,8 @@ class _DashboardState extends State<Dashboard> {
     });
 
     if (mounted) {
-      Provider.of<QuickListsProvider>(
-        context,
-        listen: false
-      ).toggleSort(sortMode);
+      Provider.of<QuickListsProvider>(context, listen: false).toggleSort(sortMode);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _fetchQuickLists();
   }
 
   @override
@@ -127,7 +111,8 @@ class _DashboardState extends State<Dashboard> {
             Consumer<QuickListsProvider>(
               builder: (context, listsProvider, child) {
                 List<QuickList> quickLists = listsProvider.quickLists;
-
+                listsProvider.toggleSort(sortMode);
+                
                 return Expanded(
                   child: ListView.builder(
                     itemCount: quickLists.length,
