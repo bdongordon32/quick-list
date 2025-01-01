@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/new_list.dart';
+import 'package:quick_list/widgets/quick_list/list_card.dart';
 import 'package:quick_list/widgets/quick_list/lists_container.dart';
 import 'package:quick_list/widgets/dashboard_bar.dart';
 
@@ -20,14 +23,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<QuickList> quickLists = [];
   String sortMode = CREATED_AT_SORT_MODES['descending']!;
   FirebaseFirestore fireDb   = FirebaseFirestore.instance;
 
   void _fetchQuickLists() {
-    List<QuickList> documentItems = [];
-
-    fireDb.collection('lists').get().then((event) {
+    fireDb.collection('lists')
+      .get().then((event) {
       for (var doc in event.docs) {
         String quickListId = doc.id;
         QuickList quickList = QuickList.fromSnapshot(doc);
@@ -41,17 +42,12 @@ class _DashboardState extends State<Dashboard> {
               }
             }
 
-            documentItems.add(quickList);
-
-            if (sortMode == CREATED_AT_SORT_MODES['descending']) {
-              documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-            } else {
-              documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+            if (mounted) {
+              Provider.of<QuickListsProvider>(
+                context,
+                listen: false
+              ).addList(quickList);
             }
-
-            setState(() {
-              quickLists = documentItems;
-            });
           });
         }
       });
@@ -71,20 +67,33 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  // void _toggleSort() {
+  //   List<QuickList> documentItems = quickLists;
+
+  //   if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+  //     setState(() => sortMode = 'ascending');
+  //     documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  //   } else {
+  //     setState(() => sortMode = 'descending');
+  //     documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  //   }
+  // }
+
   void _toggleSort() {
-    List<QuickList> documentItems = quickLists;
-
-    if (sortMode == CREATED_AT_SORT_MODES['descending']) {
-      setState(() => sortMode = 'ascending');
-      documentItems.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-    } else {
-      setState(() => sortMode = 'descending');
-      documentItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    }
-
     setState(() {
-      quickLists = documentItems;
+      if (sortMode == CREATED_AT_SORT_MODES['descending']) {
+        setState(() => sortMode = 'ascending');
+      } else {
+        setState(() => sortMode = 'descending');
+      }
     });
+
+    if (mounted) {
+      Provider.of<QuickListsProvider>(
+        context,
+        listen: false
+      ).toggleSort(sortMode);
+    }
   }
 
   @override
@@ -112,11 +121,20 @@ class _DashboardState extends State<Dashboard> {
             DashboardBar(
               sortMode: sortMode,
               onToggleSort: _toggleSort,
-              quickListCount: quickLists.length,
+              quickListCount: [].length,
             ),
             Padding(padding: EdgeInsets.all(2)),
-            Expanded(
-              child: ListsContainer(quickLists)
+            Consumer<QuickListsProvider>(
+              builder: (context, listsProvider, child) {
+                List<QuickList> quickLists = listsProvider.quickLists;
+
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: quickLists.length,
+                    itemBuilder: (BuildContext context, int index) => ListCard(quickLists[index]),
+                  ),
+                );
+              }
             )
           ],
         ),
