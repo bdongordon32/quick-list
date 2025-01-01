@@ -60,20 +60,6 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
-  // Future<void> _addNewList(BuildContext context) async {
-  //   final bool? newQuickListAdded = await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const NewList()),
-  //   );
-
-  //   if (!context.mounted) return;
-  //   if (newQuickListAdded == null) return;
-
-  //   if (newQuickListAdded) {
-  //     _fetchQuickLists();
-  //   }
-  // }
-
   void _toggleSort() {
     setState(() {
       if (sortMode == CREATED_AT_SORT_MODES['descending']) {
@@ -101,28 +87,28 @@ class _DashboardState extends State<Dashboard> {
           top: 4,
           bottom: 8
         ),
-        child: Column(
-          children: [
-            DashboardBar(
-              sortMode: sortMode,
-              onToggleSort: _toggleSort,
-              quickListCount: [].length,
-            ),
-            Padding(padding: EdgeInsets.all(2)),
-            Consumer<QuickListsProvider>(
-              builder: (context, listsProvider, child) {
-                List<QuickList> quickLists = listsProvider.quickLists;
-                listsProvider.toggleSort(sortMode);
-                
-                return Expanded(
+        child: Consumer<QuickListsProvider>(
+          builder: (context, listsProvider, child) {
+            List<QuickList> quickLists = listsProvider.quickLists;
+            listsProvider.toggleSort(sortMode);
+
+            return Column(
+              children: [
+                DashboardBar(
+                  sortMode: sortMode,
+                  onToggleSort: _toggleSort,
+                  quickListCount: quickLists.length,
+                ),
+                Padding(padding: EdgeInsets.all(2)),
+                Expanded(
                   child: ListView.builder(
                     itemCount: quickLists.length,
                     itemBuilder: (BuildContext context, int index) => ListCard(quickLists[index]),
-                  ),
-                );
-              }
-            )
-          ],
+                  )
+                )
+              ],
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
