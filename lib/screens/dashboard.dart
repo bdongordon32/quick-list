@@ -39,7 +39,8 @@ class _DashboardState extends State<Dashboard> {
         String quickListId = doc.id;
         QuickList quickList = QuickList.fromSnapshot(doc);
 
-        fireDb.collection('/lists/$quickListId/list-items').get()
+        fireDb
+          .collection('/lists/$quickListId/list-items').get()
           .then((listItemSnapshot) {
             if (listItemSnapshot.docs.isNotEmpty) {
               for (var item in listItemSnapshot.docs) {
@@ -59,19 +60,19 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
-  Future<void> _addNewList(BuildContext context) async {
-    final bool? newQuickListAdded = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const NewList()),
-    );
+  // Future<void> _addNewList(BuildContext context) async {
+  //   final bool? newQuickListAdded = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const NewList()),
+  //   );
 
-    if (!context.mounted) return;
-    if (newQuickListAdded == null) return;
+  //   if (!context.mounted) return;
+  //   if (newQuickListAdded == null) return;
 
-    if (newQuickListAdded) {
-      _fetchQuickLists();
-    }
-  }
+  //   if (newQuickListAdded) {
+  //     _fetchQuickLists();
+  //   }
+  // }
 
   void _toggleSort() {
     setState(() {
@@ -125,7 +126,10 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _addNewList(context),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NewList()),
+        ),
         child: Icon(
           Icons.add,
           color: Colors.white,

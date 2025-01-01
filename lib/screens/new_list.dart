@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class NewList extends StatefulWidget {
@@ -34,24 +37,26 @@ class _NewListState extends State<NewList> {
 
     fireDb.collection('lists')
       .add(newQuickList)
-      .then((documentSnapshot) {
+      .then((DocumentReference<Map<String, dynamic>> documentReference) {
         fireDb.runTransaction((transaction) async {
-            for (var item in listItems) {
-            documentSnapshot
+          for (String description in listItems) {
+            documentReference
               .collection('list-items')
-              .add({
-                'description': item,
-                'completed': false
-              });
+              .add({'description': description, 'completed': false});
           }
         })
-        .then((value) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Quick list has been added'))
-            );
-            Navigator.of(context).pop(true);
-          }
+        .then((_) {
+          documentReference.get()
+            .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Quick list has been added'))
+                );
+                QuickList list = QuickList.fromSnapshot(snapshot);
+                Provider.of<QuickListsProvider>(context, listen: false).addList(list);
+                Navigator.of(context).pop();
+              }
+            });
         });
       });
   }
