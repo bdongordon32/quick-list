@@ -12,7 +12,9 @@ class ListItemCard extends StatelessWidget {
     return Row(
       children: [
         Checkbox(value: false, onChanged: null),
-        Text(listItem.description)
+        Flexible(
+          child: Text(listItem.description, overflow: TextOverflow.clip)
+        )
       ]
     );
   }

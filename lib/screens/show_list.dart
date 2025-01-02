@@ -124,9 +124,8 @@ class _ShowListState extends State<ShowList> {
             Expanded(
               child: listItems!.isEmpty ?
               Text('No List items') :
-              ListView.separated(
-                itemCount: listItems!.length,
-                separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
+              ListView.builder(
+                itemCount: listItems.length,
                 itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index]),
               ),
             )
