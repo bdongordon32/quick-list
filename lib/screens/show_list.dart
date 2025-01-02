@@ -126,7 +126,7 @@ class _ShowListState extends State<ShowList> {
               Text('No List items') :
               ListView.builder(
                 itemCount: listItems.length,
-                itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index]),
+                itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index], quickList: list),
               ),
             )
           ],

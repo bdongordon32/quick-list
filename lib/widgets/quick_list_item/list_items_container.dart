@@ -12,12 +12,13 @@ class ListItemsContainer extends StatelessWidget {
       return Text('No list items');
     }
 
-    return Expanded(
-      child: ListView.separated(
-        itemCount: listItems!.length,
-        separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
-          itemBuilder: (BuildContext context, int index) => ListItemCard(listItems![index]),
-      )
-    );
+    return Text('old');
+    // return Expanded(
+    //   child: ListView.separated(
+    //     itemCount: listItems!.length,
+    //     separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
+    //       itemBuilder: (BuildContext context, int index) => ListItemCard(listItems![index]),
+    //   )
+    // );
   }
 }
