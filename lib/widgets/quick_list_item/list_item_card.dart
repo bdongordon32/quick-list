@@ -30,7 +30,6 @@ class _ListItemCardState extends State<ListItemCard> {
       .collection('list-items').doc(listItemId)
       .set({ 'completed': value }, SetOptions(merge: true))
       .then((_) {
-
       });
   }
 
