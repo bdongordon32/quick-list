@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
-import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
+import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class ShowList extends StatefulWidget {
@@ -120,7 +120,16 @@ class _ShowListState extends State<ShowList> {
             ),
             Padding(padding: EdgeInsets.only(bottom: 8)),
             Text('$completedListItemsCount of $listItemsCount is completed'),
-            ListItemsContainer(listItems)
+            // ListItemsContainer(listItems)
+            Expanded(
+              child: listItems!.isEmpty ?
+              Text('No List items') :
+              ListView.separated(
+                itemCount: listItems!.length,
+                separatorBuilder: (BuildContext context, int index) => const Padding(padding: EdgeInsets.all(4.0)),
+                itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index]),
+              ),
+            )
           ],
         ),
       )
