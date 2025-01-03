@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
-import 'package:quick_list/widgets/quick_list_item/list_items_container.dart';
+import 'package:quick_list/providers/quick_list_items_provider.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
+import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class ShowList extends StatefulWidget {
@@ -27,16 +30,19 @@ class _ShowListState extends State<ShowList> {
     super.initState();
 
     titleFieldController.text = widget.quickList.title;
+
+    if (widget.quickList.listItems!.isNotEmpty) {
+      Provider.of<QuickListItemsProvider>(
+        context,
+        listen: false
+      ).initListItems(widget.quickList.listItems);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     QuickList list = widget.quickList;
-    int listItemsCount = list.listItems?.length ?? 0;
-    int completedListItemsCount = list.listItems!.where((item) => item.completed).length;
     final String listId = list.id;
-
-    List<dynamic>? listItems = list.listItems;
 
     void saveTitle() {
       final String titleFieldText = titleFieldController.text;
@@ -56,10 +62,8 @@ class _ShowListState extends State<ShowList> {
 
     return Scaffold(
       appBar: AppBar(
-        // title: Text(widget.quickList.title),
         title: Row(
           children: [
-            // Text(widget.quickList.title),
             Expanded(
               child: TextInput(
                 label: 'Title',
@@ -76,26 +80,68 @@ class _ShowListState extends State<ShowList> {
               disabledColor: appBarLabelColor,
               onPressed: isTitleChanged ? saveTitle : null,
             ),
+            TextButton(
+              style: TextButton.styleFrom(iconColor: deleteButtonColor),
+              onPressed: () {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Hold down to delete'), duration: Duration(milliseconds: 800))
+                  );
+                }
+              },
+              onLongPress: () {
+                fireDb.collection('lists').doc(widget.quickList.id).delete()
+                  .then((res) {
+                    if (context.mounted) {
+                      Provider.of<QuickListsProvider>(
+                        context,
+                        listen: false
+                      ).removeList(widget.quickList);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Successfully deleted list'), duration: Duration(milliseconds: 800))
+                      );
+                      Navigator.of(context).pop();
+                    }
+                });
+              },
+              child: Icon(Icons.delete, size: 24,),
+            ),
           ],
         ),
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            LinearProgressBar(
-              maxSteps: listItemsCount,
-              currentStep: completedListItemsCount,
-              backgroundColor: progressBarBase,
-              progressColor: progressBarCompleted,
-              semanticsLabel: 'Hi',
-              semanticsValue: 'Bye',
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 8)),
-            Text('$completedListItemsCount of $listItemsCount is completed'),
-            ListItemsContainer(listItems)
-          ],
-        ),
+        child: Consumer<QuickListItemsProvider>(
+          builder: (context, itemProvider, child) {
+            List<QuickListItem> listItems = itemProvider.listItems;
+            int listItemsCount = listItems.length ?? 0;
+            int completedListItemsCount = listItems.where((item) => item.completed).length;
+
+            return Column(
+              children: [
+                LinearProgressBar(
+                  maxSteps: listItemsCount,
+                  currentStep: completedListItemsCount,
+                  backgroundColor: progressBarBase,
+                  progressColor: progressBarCompleted,
+                  semanticsLabel: 'Hi',
+                  semanticsValue: 'Bye',
+                ),
+                Padding(padding: EdgeInsets.only(bottom: 8)),
+                Text('$completedListItemsCount of $listItemsCount is completed'),
+                // ListItemsContainer(listItems)
+                Expanded(
+                  child: listItems!.isEmpty ?
+                  Text('No List items') :
+                  ListView.builder(
+                    itemCount: listItems.length,
+                    itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index], quickList: list),
+                  ),
+                )
+              ],
+            );
+          }
+        )
       )
     );
   }

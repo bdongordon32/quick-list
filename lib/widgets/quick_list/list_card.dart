@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/providers/quick_list_items_provider.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/show_list.dart';
 
 class ListCard extends StatelessWidget {
@@ -44,12 +47,16 @@ class ListCard extends StatelessWidget {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Text(
-              quickList.cardSubtitle(),
-              style: TextStyle(
-                color: primaryDarkAccent,
-                fontWeight: FontWeight.w500
-              ),
+            Consumer<QuickListItemsProvider>(
+              builder: (context, listItemsProvider, child) {
+                return Text(
+                  quickList.cardSubtitle(),
+                  style: TextStyle(
+                    color: primaryDarkAccent,
+                    fontWeight: FontWeight.w500
+                  ),
+                );
+              }
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

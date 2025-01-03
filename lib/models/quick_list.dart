@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 
 class QuickList {
   final String id;
-  String title;
-  final String rawContent;
   final Timestamp createdAt;
-  List<dynamic>? listItems;
+  String rawContent;
+  String title;
+  List<QuickListItem>? listItems;
 
   QuickList({
     required this.id,
-    required this.title,
     required this.createdAt,
+    required this.title,
     this.rawContent = '',
     this.listItems
   });

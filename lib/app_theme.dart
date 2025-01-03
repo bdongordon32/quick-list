@@ -5,6 +5,8 @@ final Color primaryLightAccent = Color(0xFFE8EEFF);
 
 final Color appBarLabelColor = Color.fromARGB(255, 176, 194, 244);
 
+final Color deleteButtonColor = Color.fromARGB(255, 151, 73, 73);
+
 final Color progressBarBase = Color.fromARGB(255, 183, 191, 206);
 final Color progressBarCompleted = Color(0xFF5D6B85);
 

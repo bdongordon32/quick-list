@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
+import 'package:quick_list/providers/quick_list_items_provider.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -11,7 +14,15 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => QuickListsProvider()),
+        ChangeNotifierProvider(create: (context) => QuickListItemsProvider()),
+      ],
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {

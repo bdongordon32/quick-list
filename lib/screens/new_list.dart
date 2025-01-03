@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class NewList extends StatefulWidget {
@@ -20,38 +24,53 @@ class _NewListState extends State<NewList> {
   void convertTextToList() {
     String textFieldContent = listTextFieldController.text;
 
+    // TODO: Allow user to create list without items
     if (textFieldContent.isEmpty) return;
 
-    List<String> listItems = textFieldContent.split('\n');
+    List<String> parsedListItems = textFieldContent.split('\n');
     String title = titleController.text;
 
-    // listItems, title, rawContent
     Map<String, dynamic> newQuickList = {
       'title': title,
       'rawContent': textFieldContent,
       'createdAt': FieldValue.serverTimestamp()
     };
 
+    List<QuickListItem> listItems = [];
+
     fireDb.collection('lists')
       .add(newQuickList)
-      .then((documentSnapshot) {
+      .then((DocumentReference<Map<String, dynamic>> documentReference) {
         fireDb.runTransaction((transaction) async {
-            for (var item in listItems) {
-            documentSnapshot
+          for (String description in parsedListItems) {
+            QuickListItem item = QuickListItem(
+              description: description,
+              completed: false
+            );
+
+            documentReference
               .collection('list-items')
-              .add({
-                'description': item,
-                'completed': false
-              });
+              .add({'description': item.description, 'completed': item.completed})
+              .then((_) => listItems.add(item));
           }
         })
-        .then((value) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Quick list has been added'))
-            );
-            Navigator.of(context).pop(true);
-          }
+        .then((_) {
+          documentReference.get()
+            .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Quick list has been added'))
+                );
+                QuickList list = QuickList.fromSnapshot(snapshot);
+
+                for (QuickListItem item in listItems) {
+                  list.addToListItems(item);
+                }
+
+                Provider.of<QuickListsProvider>(context, listen: false).addList(list);
+                Navigator.of(context).pop();
+              }
+            });
         });
       });
   }
@@ -78,6 +97,7 @@ class _NewListState extends State<NewList> {
               Expanded(
                 child: TextInput(
                   label: 'Content',
+                  isRequired: true,
                   inputController: listTextFieldController,
                   minNoOfLines: 1,
                   maxNoOfLines: 100,
