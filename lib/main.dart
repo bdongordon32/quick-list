@@ -23,12 +23,6 @@ Future<void> main() async {
       child: const MainApp(),
     )
   );
-  // runApp(
-  //   ChangeNotifierProvider(
-  //     create: (context) => QuickListsProvider(),
-  //     child: const MainApp(),
-  //   )
-  // );
 }
 
 class MainApp extends StatelessWidget {
