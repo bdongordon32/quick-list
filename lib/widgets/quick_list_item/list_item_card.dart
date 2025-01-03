@@ -33,10 +33,16 @@ class _ListItemCardState extends State<ListItemCard> {
       .set({ 'completed': value }, SetOptions(merge: true))
       .then((_) {
         if (mounted) {
-          Provider.of<QuickListItemsProvider>(
+          QuickListItemsProvider providerInstance = Provider.of<QuickListItemsProvider>(
             context,
             listen: false
-          ).markAsCompleted(listItemId);
+          );
+
+          if (value) {
+            providerInstance.markAsComplete(listItemId);
+          } else {
+            providerInstance.markAsIncomplete(listItemId);
+          }
         }
       });
   }

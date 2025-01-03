@@ -18,12 +18,19 @@ class QuickListItemsProvider extends ChangeNotifier {
     }
   }
 
-  void markAsCompleted(listItemId) {
-    QuickListItem selectedListItem = _listItems.firstWhere((element) {
+  void markAsIncomplete(listItemId) {
+    _selectedListItem(listItemId).completed = false;
+    notifyListeners();
+  }
+
+  void markAsComplete(listItemId) {
+    _selectedListItem(listItemId).completed = true;
+    notifyListeners();
+  }
+
+  QuickListItem _selectedListItem(listItemId) {
+    return _listItems.firstWhere((element) {
       return element.id == listItemId;
     });
-
-    selectedListItem.completed = true;
-    notifyListeners();
   }
 }
