@@ -11,7 +11,8 @@ class QuickListItemsProvider extends ChangeNotifier {
   }
 
   void initListItems(List<QuickListItem>? items) {
-    if (items!.isEmpty) return;
+    if (items!.isEmpty) { return; }
+    if (_listItems.isNotEmpty) { _listItems.clear(); }
 
     for (QuickListItem item in items) {
       _listItems.add(item);
