@@ -6,8 +6,8 @@ class QuickListItem {
   bool completed;
 
   QuickListItem({
-    required this.id,
     required this.description,
+    this.id = '',
     this.completed = false
   });
 

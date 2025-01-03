@@ -24,6 +24,7 @@ class _NewListState extends State<NewList> {
   void convertTextToList() {
     String textFieldContent = listTextFieldController.text;
 
+    // TODO: Allow user to create list without items
     if (textFieldContent.isEmpty) return;
 
     List<String> parsedListItems = textFieldContent.split('\n');
@@ -96,6 +97,7 @@ class _NewListState extends State<NewList> {
               Expanded(
                 child: TextInput(
                   label: 'Content',
+                  isRequired: true,
                   inputController: listTextFieldController,
                   minNoOfLines: 1,
                   maxNoOfLines: 100,
