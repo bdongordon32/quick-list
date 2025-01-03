@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
+import 'package:quick_list/providers/quick_list_items_provider.dart';
 
 class ListItemCard extends StatefulWidget {
   const ListItemCard(
@@ -30,6 +32,12 @@ class _ListItemCardState extends State<ListItemCard> {
       .collection('list-items').doc(listItemId)
       .set({ 'completed': value }, SetOptions(merge: true))
       .then((_) {
+        if (mounted) {
+          Provider.of<QuickListItemsProvider>(
+            context,
+            listen: false
+          ).markAsCompleted(listItemId);
+        }
       });
   }
 
