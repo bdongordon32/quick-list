@@ -114,7 +114,7 @@ class _ShowListState extends State<ShowList> {
         child: Consumer<QuickListItemsProvider>(
           builder: (context, itemProvider, child) {
             List<QuickListItem> listItems = itemProvider.listItems;
-            int listItemsCount = listItems.length ?? 0;
+            int listItemsCount = listItems.length;
             int completedListItemsCount = listItems.where((item) => item.completed).length;
 
             return Column(
