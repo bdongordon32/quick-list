@@ -129,9 +129,10 @@ class _ShowListState extends State<ShowList> {
                 ),
                 Padding(padding: EdgeInsets.only(bottom: 8)),
                 Text('$completedListItemsCount of $listItemsCount is completed'),
+                Padding(padding: EdgeInsets.only(bottom: 8)),
                 // ListItemsContainer(listItems)
                 Expanded(
-                  child: listItems!.isEmpty ?
+                  child: listItems.isEmpty ?
                   Text('No List items') :
                   ListView.builder(
                     itemCount: listItems.length,
