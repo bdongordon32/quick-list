@@ -151,17 +151,28 @@ class _ShowListState extends State<ShowList> {
           }
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            isEditing = !isEditing;
-          });
-        },
-        child: Icon(
-          Icons.edit,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        spacing: 8,
+        children: [
+          FloatingActionButton(
+            backgroundColor: isEditing ? deleteButtonColor : primaryDarkAccent,
+            onPressed: () {
+              setState(() { isEditing = !isEditing; });
+            },
+            child: Icon(isEditing ? Icons.cancel : Icons.edit, color: Colors.white,),
+          ),
+          if (isEditing)...[
+            FloatingActionButton(
+              backgroundColor: saveButtonColor,
+              onPressed: () {
+                setState(() { isEditing = false; });
+              },
+              child: Icon(Icons.check, color: Colors.white,),
+            ),
+          ]
+        ],
+      )
     );
   }
 }
