@@ -143,7 +143,15 @@ class _ShowListState extends State<ShowList> {
             );
           }
         )
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+        },
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
