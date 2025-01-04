@@ -7,6 +7,7 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
+import 'package:quick_list/widgets/edit_text_area.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -21,6 +22,8 @@ class ShowList extends StatefulWidget {
 
 class _ShowListState extends State<ShowList> {
   bool isTitleChanged = false;
+
+  bool isEditing = false;
 
   final titleFieldController = TextEditingController();
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
@@ -117,6 +120,10 @@ class _ShowListState extends State<ShowList> {
             int listItemsCount = listItems.length;
             int completedListItemsCount = listItems.where((item) => item.completed).length;
 
+            if (isEditing) {
+              return EditTextArea(quickList: list);
+            }
+
             return Column(
               children: [
                 LinearProgressBar(
@@ -146,6 +153,9 @@ class _ShowListState extends State<ShowList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          setState(() {
+            isEditing = !isEditing;
+          });
         },
         child: Icon(
           Icons.edit,
