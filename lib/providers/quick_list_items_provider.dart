@@ -35,7 +35,13 @@ class QuickListItemsProvider extends ChangeNotifier {
     });
   }
 
-  void addListItems(List<QuickListItem> items) {
-    
+  void addListItems(Iterable<QuickListItem> items) {
+    if (items.isEmpty) return;
+
+    for (QuickListItem item in items) {
+      _listItems.add(item);
+    }
+
+    notifyListeners();
   }
 }

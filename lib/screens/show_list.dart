@@ -162,7 +162,10 @@ class _ShowListState extends State<ShowList> {
             }
           );
         },
-        child: Icon(Icons.edit),
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
       ),
     );
   }
