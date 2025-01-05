@@ -23,6 +23,8 @@ class _ShowListState extends State<ShowList> {
   bool isTitleChanged = false;
 
   final titleFieldController = TextEditingController();
+  final listTextFieldController = TextEditingController();
+
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   @override
@@ -131,18 +133,47 @@ class _ShowListState extends State<ShowList> {
                 Text('$completedListItemsCount of $listItemsCount is completed'),
                 // ListItemsContainer(listItems)
                 Expanded(
-                  child: listItems!.isEmpty ?
+                  child: listItems.isEmpty ?
                   Text('No List items') :
                   ListView.builder(
                     itemCount: listItems.length,
                     itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index], quickList: list),
                   ),
-                )
+                ),
               ],
             );
           }
         )
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2)
+            ),
+            builder: (BuildContext context) {
+              return Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Wrap(
+                    clipBehavior: Clip.antiAlias,
+                    children: [
+                      TextInput(
+                        label: 'Content',
+                        isRequired: true,
+                        inputController: listTextFieldController,
+                        minNoOfLines: 1,
+                        maxNoOfLines: 10,
+                        hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
+                      ),
+                    ],
+                  )
+                );
+            }
+          );
+        },
+        child: Icon(Icons.edit),
+      ),
     );
   }
 }
