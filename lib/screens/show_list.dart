@@ -149,26 +149,44 @@ class _ShowListState extends State<ShowList> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isDismissible: false,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(2)
             ),
             builder: (BuildContext context) {
               return Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Wrap(
-                    clipBehavior: Clip.antiAlias,
-                    children: [
-                      TextInput(
-                        label: 'Content',
-                        isRequired: true,
-                        inputController: listTextFieldController,
-                        minNoOfLines: 1,
-                        maxNoOfLines: 10,
-                        hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
-                      ),
-                    ],
-                  )
-                );
+                padding: EdgeInsets.all(12),
+                child: Wrap(
+                  clipBehavior: Clip.antiAlias,
+                  children: [
+                    TextInput(
+                      label: 'Content',
+                      isRequired: true,
+                      inputController: listTextFieldController,
+                      minNoOfLines: 1,
+                      maxNoOfLines: 10,
+                      hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            print(listTextFieldController.text);
+                          },
+                          icon: Icon(Icons.check)
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(Icons.cancel)
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              );
             }
           );
         },
