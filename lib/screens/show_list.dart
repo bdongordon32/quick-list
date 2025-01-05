@@ -156,6 +156,7 @@ class _ShowListState extends State<ShowList> {
             ),
             builder: (BuildContext context) {
               return AddForm(
+                quickList: list,
                 bottomSheetContext: context,
                 fieldController: listTextFieldController
               );

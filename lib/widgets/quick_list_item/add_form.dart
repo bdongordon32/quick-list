@@ -1,21 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class AddForm extends StatelessWidget {
-  const AddForm({
+  AddForm({
     required this.bottomSheetContext,
     required this.fieldController,
+    required this.quickList,
     super.key
   });
 
   final BuildContext bottomSheetContext;
   final TextEditingController fieldController;
+  final QuickList quickList;
+
+  final FirebaseFirestore fireDb   = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    String listId = quickList.id;
+
     return Padding(
       padding: EdgeInsets.all(12),
       child: Wrap(
@@ -43,12 +51,22 @@ class AddForm extends StatelessWidget {
                     return QuickListItem(description: item, completed: false);
                   });
 
-                  // TODO: Call Firebase and add this to .then
-                  Provider.of<QuickListItemsProvider>(
-                    context,
-                    listen: false
-                  ).addListItems(items);
-                  Navigator.of(bottomSheetContext).pop();
+                  fireDb.runTransaction((transaction) async {
+                    for (QuickListItem item in items) {
+                      fireDb.collection('lists').doc(listId)
+                        .collection('list-items')
+                        .add({'description': item.description, 'completed': false})
+                        .then((_) {
+                          if (bottomSheetContext.mounted) {
+                            Provider.of<QuickListItemsProvider>(
+                              context,
+                              listen: false
+                            ).addListItems(items);
+                            Navigator.of(bottomSheetContext).pop();
+                          }
+                        });
+                    }
+                  });
                 },
                 icon: Icon(Icons.check)
               ),
