@@ -7,6 +7,7 @@ import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
+import 'package:quick_list/widgets/quick_list_item/add_form.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -154,38 +155,9 @@ class _ShowListState extends State<ShowList> {
               borderRadius: BorderRadius.circular(2)
             ),
             builder: (BuildContext context) {
-              return Padding(
-                padding: EdgeInsets.all(12),
-                child: Wrap(
-                  clipBehavior: Clip.antiAlias,
-                  children: [
-                    TextInput(
-                      label: 'Content',
-                      isRequired: true,
-                      inputController: listTextFieldController,
-                      minNoOfLines: 1,
-                      maxNoOfLines: 10,
-                      hintText: 'Paste a body of text and it will create a list automatically for you. (Max of 100 items)'
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            print(listTextFieldController.text);
-                          },
-                          icon: Icon(Icons.check)
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(Icons.cancel)
-                        ),
-                      ],
-                    )
-                  ],
-                )
+              return AddForm(
+                bottomSheetContext: context,
+                fieldController: listTextFieldController
               );
             }
           );
