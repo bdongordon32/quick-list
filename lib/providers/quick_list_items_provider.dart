@@ -34,4 +34,8 @@ class QuickListItemsProvider extends ChangeNotifier {
       return element.id == listItemId;
     });
   }
+
+  void addListItems(List<QuickListItem> items) {
+    
+  }
 }
