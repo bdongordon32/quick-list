@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
 class AddForm extends StatelessWidget {
@@ -51,20 +51,21 @@ class AddForm extends StatelessWidget {
                     return QuickListItem(description: item, completed: false);
                   });
 
-                  fireDb.runTransaction((transaction) async {
+                  fireDb.runTransaction((Transaction transaction) async {
                     for (QuickListItem item in items) {
                       fireDb.collection('lists').doc(listId)
                         .collection('list-items')
-                        .add({'description': item.description, 'completed': false})
-                        .then((_) {
-                          if (bottomSheetContext.mounted) {
-                            Provider.of<QuickListItemsProvider>(
-                              context,
-                              listen: false
-                            ).addListItems(items);
-                            Navigator.of(bottomSheetContext).pop();
-                          }
-                        });
+                        .add({'description': item.description, 'completed': false});
+                    }
+                  })
+                  .then((_) {
+                    fieldController.clear();
+                    if (bottomSheetContext.mounted) {
+                      Provider.of<QuickListsProvider>(
+                        context,
+                        listen: false
+                      ).addItemsToList(quickList, items);
+                      Navigator.of(bottomSheetContext).pop();
                     }
                   });
                 },

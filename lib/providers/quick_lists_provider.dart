@@ -38,7 +38,7 @@ class QuickListsProvider extends ChangeNotifier {
   }
 
   // void addItemToList(QuickList list, QuickList)
-  void addItemsToList(QuickList list, List<QuickListItem> items) {
+  void addItemsToList(QuickList list, Iterable<QuickListItem> items) {
     if (items.isEmpty) return;
 
     String listId = list.id;
