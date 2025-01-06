@@ -15,6 +15,10 @@ class QuickListsProvider extends ChangeNotifier {
   }
 
   UnmodifiableListView<QuickListItem> quickListItems(String listId) {
+    if (_listItemsByListId[listId] == null) {
+      return UnmodifiableListView([]);
+    }
+
     return UnmodifiableListView(_listItemsByListId[listId]!);
   }
 
@@ -26,6 +30,7 @@ class QuickListsProvider extends ChangeNotifier {
 
   void removeList(QuickList list) {
     _lists.remove(list);
+    _listItemsByListId.remove(list.id);
     notifyListeners();
   }
 

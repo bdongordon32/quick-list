@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/show_list.dart';
 

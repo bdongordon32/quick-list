@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/quick_list_item/add_form.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
@@ -33,13 +32,6 @@ class _ShowListState extends State<ShowList> {
     super.initState();
 
     titleFieldController.text = widget.quickList.title;
-
-    if (widget.quickList.listItems!.isNotEmpty) {
-      Provider.of<QuickListItemsProvider>(
-        context,
-        listen: false
-      ).initListItems(widget.quickList.listItems);
-    }
   }
 
   @override
