@@ -48,6 +48,18 @@ class QuickListsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void markItemAsComplete(QuickList list, String listItemId) {
+    String listId = list.id;
+    _selectedListItem(listItemId, listId: listId).completed = true;
+    notifyListeners();
+  }
+
+  void markItemAsInComplete(QuickList list, String listItemId) {
+    String listId = list.id;
+    _selectedListItem(listItemId, listId: listId).completed = false;
+    notifyListeners();
+  }
+
   String cardSubtitle(QuickList list) {
     String listId = list.id;
     List<QuickListItem> items = _listItemsByListId[listId]!;
@@ -60,6 +72,11 @@ class QuickListsProvider extends ChangeNotifier {
     int listCount = items.length;
 
     return '$completeItems/$listCount items completed';
+  }
+
+  QuickListItem _selectedListItem(String listItemId, { required String listId }) {
+    return _listItemsByListId[listId]
+      !.firstWhere((QuickListItem element) => element.id == listItemId);
   }
 
   void _initListItems(QuickList list, List<QuickListItem>? listItems) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
+import 'package:quick_list/providers/quick_lists_provider.dart';
 
 class ListItemCard extends StatefulWidget {
   const ListItemCard(
@@ -33,15 +33,15 @@ class _ListItemCardState extends State<ListItemCard> {
       .set({ 'completed': value }, SetOptions(merge: true))
       .then((_) {
         if (mounted) {
-          QuickListItemsProvider providerInstance = Provider.of<QuickListItemsProvider>(
+          QuickListsProvider providerInstance = Provider.of<QuickListsProvider>(
             context,
             listen: false
           );
 
           if (value) {
-            providerInstance.markAsComplete(listItemId);
+            providerInstance.markItemAsComplete(widget.quickList, listItemId);
           } else {
-            providerInstance.markAsIncomplete(listItemId);
+            providerInstance.markItemAsInComplete(widget.quickList, listItemId);
           }
         }
       });
