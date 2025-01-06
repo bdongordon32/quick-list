@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
+import 'package:quick_list/widgets/text_input.dart';
 
 class ListItemCard extends StatefulWidget {
   const ListItemCard(
@@ -20,8 +21,10 @@ class ListItemCard extends StatefulWidget {
 
 class _ListItemCardState extends State<ListItemCard> {
   bool isCompleted = false;
+  bool isEditing = false;
   
-  FirebaseFirestore fireDb = FirebaseFirestore.instance;
+  final FirebaseFirestore fireDb = FirebaseFirestore.instance;
+  final TextEditingController descriptionController = TextEditingController();
 
   void _toggleCompletion({
     required String quickListId,
@@ -51,6 +54,8 @@ class _ListItemCardState extends State<ListItemCard> {
   void initState() {
     super.initState();
 
+    // descriptionController.text = widget.listItem.description;
+
     setState(() {
       isCompleted = widget.listItem.completed;
     });
@@ -60,6 +65,8 @@ class _ListItemCardState extends State<ListItemCard> {
   Widget build(BuildContext context) {
     String listItemId = widget.listItem.id;
     String quickListId = widget.quickList.id;
+
+    descriptionController.text = widget.listItem.description;
 
     return Row(
       children: [
@@ -80,7 +87,43 @@ class _ListItemCardState extends State<ListItemCard> {
           }
         ),
         Flexible(
-          child: Text(widget.listItem.description, overflow: TextOverflow.clip)
+          child: isEditing ?
+            Stack(
+              alignment: AlignmentDirectional.centerEnd,
+              children: [
+                TextInput(
+                  inputController: descriptionController,
+                ),
+                // IconButton(
+                //   iconSize: 18,
+                //   onPressed: () {
+                //     setState(() => isEditing = false);
+                //   },
+                //   icon: Icon(Icons.check)
+                // ),
+                IconButton(
+                  iconSize: 18,
+                  onPressed: () {
+                    setState(() => isEditing = false);
+                  },
+                  icon: Icon(Icons.cancel)
+                )
+              ],
+            ) :
+            GestureDetector(
+              onTap: () {
+                setState(() => isEditing = true);
+              },
+              onPanUpdate: (DragUpdateDetails details) {
+                if (details.delta.dx > 0) {
+                  print('Swiped right TODO: Delete item');
+                }
+              },
+              child: Text(
+                widget.listItem.description,
+                overflow: TextOverflow.clip
+              ),
+            )
         )
       ]
     );

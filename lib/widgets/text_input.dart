@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
   const TextInput({
-    required this.label,
+    this.label,
     this.isRequired = false,
     this.inputController,
     this.minNoOfLines = 1,
@@ -15,7 +15,7 @@ class TextInput extends StatelessWidget {
     super.key
   });
 
-  final String label;
+  final String? label;
   final bool isRequired;
   final int minNoOfLines;
   final int maxNoOfLines;
