@@ -47,10 +47,12 @@ class ListCard extends StatelessWidget {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Consumer<QuickListItemsProvider>(
-              builder: (context, listItemsProvider, child) {
+            Consumer<QuickListsProvider>(
+              builder: (context, listsProvider, child) {
+                String subtitle = listsProvider.cardSubtitle(quickList);
+
                 return Text(
-                  quickList.cardSubtitle(),
+                  subtitle,
                   style: TextStyle(
                     color: primaryDarkAccent,
                     fontWeight: FontWeight.w500

@@ -48,6 +48,20 @@ class QuickListsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String cardSubtitle(QuickList list) {
+    String listId = list.id;
+    List<QuickListItem> items = _listItemsByListId[listId]!;
+
+    if (items.isEmpty) {
+      return 'No items';
+    }
+
+    int completeItems = items.where((item) => item.completed).length;
+    int listCount = items.length;
+
+    return '$completeItems/$listCount items completed';
+  }
+
   void _initListItems(QuickList list, List<QuickListItem>? listItems) {
     String listId = list.id;
 
