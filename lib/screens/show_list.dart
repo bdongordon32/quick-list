@@ -114,9 +114,9 @@ class _ShowListState extends State<ShowList> {
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
-        child: Consumer<QuickListItemsProvider>(
-          builder: (context, itemProvider, child) {
-            List<QuickListItem> listItems = itemProvider.listItems;
+        child: Consumer<QuickListsProvider>(
+          builder: (context, listProvider, child) {
+            List<QuickListItem> listItems = listProvider.quickListItems(listId);
             int listItemsCount = listItems.length;
             int completedListItemsCount = listItems.where((item) => item.completed).length;
 

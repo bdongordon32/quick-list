@@ -2,17 +2,25 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:quick_list/models/quick_list.dart';
+import 'package:quick_list/models/quick_list_item.dart';
 
 class QuickListsProvider extends ChangeNotifier {
   final List<QuickList> _lists = [];
   final String quickListId = '';
 
+  final Map<String, List<QuickListItem>> _listItemsByListId = {};
+
   UnmodifiableListView<QuickList> get quickLists {
     return UnmodifiableListView(_lists);
   }
 
+  UnmodifiableListView<QuickListItem> quickListItems(String listId) {
+    return UnmodifiableListView(_listItemsByListId[listId]!);
+  }
+
   void addList(QuickList list) {
     _lists.add(list);
+    _initListItems(list, list.listItems);
     notifyListeners();
   }
 
@@ -27,5 +35,26 @@ class QuickListsProvider extends ChangeNotifier {
     } else {
       _lists.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     }
+  }
+
+  // void addItemToList(QuickList list, QuickList)
+  void addItemsToList(QuickList list, List<QuickListItem> items) {
+    if (items.isEmpty) return;
+
+    String listId = list.id;
+    if (_listItemsByListId[listId] == null) return;
+
+    _listItemsByListId[listId]?.addAll((items));
+    notifyListeners();
+  }
+
+  void _initListItems(QuickList list, List<QuickListItem>? listItems) {
+    String listId = list.id;
+
+    if (_listItemsByListId[listId] == null) {
+      _listItemsByListId[listId] = [];
+    }
+
+    _listItemsByListId[listId]?.addAll(listItems!);
   }
 }
