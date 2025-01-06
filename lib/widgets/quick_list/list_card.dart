@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/screens/show_list.dart';
 
@@ -47,10 +46,12 @@ class ListCard extends StatelessWidget {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Consumer<QuickListItemsProvider>(
-              builder: (context, listItemsProvider, child) {
+            Consumer<QuickListsProvider>(
+              builder: (context, listsProvider, child) {
+                String subtitle = listsProvider.cardSubtitle(quickList);
+
                 return Text(
-                  quickList.cardSubtitle(),
+                  subtitle,
                   style: TextStyle(
                     color: primaryDarkAccent,
                     fontWeight: FontWeight.w500

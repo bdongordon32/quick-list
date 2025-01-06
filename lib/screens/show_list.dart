@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
-import 'package:quick_list/providers/quick_list_items_provider.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
+import 'package:quick_list/widgets/quick_list_item/add_form.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
@@ -23,6 +23,8 @@ class _ShowListState extends State<ShowList> {
   bool isTitleChanged = false;
 
   final titleFieldController = TextEditingController();
+  final listTextFieldController = TextEditingController();
+
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   @override
@@ -30,13 +32,6 @@ class _ShowListState extends State<ShowList> {
     super.initState();
 
     titleFieldController.text = widget.quickList.title;
-
-    if (widget.quickList.listItems!.isNotEmpty) {
-      Provider.of<QuickListItemsProvider>(
-        context,
-        listen: false
-      ).initListItems(widget.quickList.listItems);
-    }
   }
 
   @override
@@ -111,10 +106,10 @@ class _ShowListState extends State<ShowList> {
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
-        child: Consumer<QuickListItemsProvider>(
-          builder: (context, itemProvider, child) {
-            List<QuickListItem> listItems = itemProvider.listItems;
-            int listItemsCount = listItems.length ?? 0;
+        child: Consumer<QuickListsProvider>(
+          builder: (context, listProvider, child) {
+            List<QuickListItem> listItems = listProvider.quickListItems(listId);
+            int listItemsCount = listItems.length;
             int completedListItemsCount = listItems.where((item) => item.completed).length;
 
             return Column(
@@ -129,20 +124,41 @@ class _ShowListState extends State<ShowList> {
                 ),
                 Padding(padding: EdgeInsets.only(bottom: 8)),
                 Text('$completedListItemsCount of $listItemsCount is completed'),
-                // ListItemsContainer(listItems)
                 Expanded(
-                  child: listItems!.isEmpty ?
+                  child: listItems.isEmpty ?
                   Text('No List items') :
                   ListView.builder(
                     itemCount: listItems.length,
                     itemBuilder: (BuildContext context, int index) => ListItemCard(listItems[index], quickList: list),
                   ),
-                )
+                ),
               ],
             );
           }
         )
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isDismissible: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2)
+            ),
+            builder: (BuildContext context) {
+              return AddForm(
+                quickList: list,
+                bottomSheetContext: context,
+                fieldController: listTextFieldController
+              );
+            }
+          );
+        },
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
