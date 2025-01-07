@@ -79,6 +79,13 @@ class QuickListsProvider extends ChangeNotifier {
     return '$completeItems/$listCount items completed';
   }
 
+  void updateListItem(QuickList list, String listItemId, { required String description }) {
+    // TODO: Use description setter
+    _selectedListItem(listItemId, listId: list.id)
+      .description = description; 
+    notifyListeners();
+  }
+
   QuickListItem _selectedListItem(String listItemId, { required String listId }) {
     return _listItemsByListId[listId]
       !.firstWhere((QuickListItem element) => element.id == listItemId);

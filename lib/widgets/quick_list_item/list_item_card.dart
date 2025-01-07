@@ -51,7 +51,17 @@ class _ListItemCardState extends State<ListItemCard> {
   }
 
   void _updateItemDescripton(String value) {
-    print(value);
+    // print(widget.listItem.id);
+    // print(widget.quickList.id);
+    // print(value);
+    Provider.of<QuickListsProvider>(
+      context,
+      listen: false
+    ).updateListItem(
+      widget.quickList,
+      widget.listItem.id,
+      description: value
+    );
     setState(() => isEditing = false);
   }
 
