@@ -50,6 +50,11 @@ class _ListItemCardState extends State<ListItemCard> {
       });
   }
 
+  void _updateItemDescripton(String value) {
+    print(value);
+    setState(() => isEditing = false);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -90,17 +95,12 @@ class _ListItemCardState extends State<ListItemCard> {
           child: isEditing ?
             Stack(
               alignment: AlignmentDirectional.centerEnd,
-              children: [
+              children: <Widget>[
                 TextInput(
                   inputController: descriptionController,
+                  inputAction: TextInputAction.go,
+                  onFieldSubmit: (String value) => _updateItemDescripton(value)
                 ),
-                // IconButton(
-                //   iconSize: 18,
-                //   onPressed: () {
-                //     setState(() => isEditing = false);
-                //   },
-                //   icon: Icon(Icons.check)
-                // ),
                 IconButton(
                   iconSize: 18,
                   onPressed: () {
