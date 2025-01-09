@@ -51,6 +51,23 @@ class _ListItemCardState extends State<ListItemCard> {
       });
   }
 
+  void _deleteItem() {
+    fireDb.collection('lists').doc(widget.quickList.id)
+      .collection('list-items').doc(widget.listItem.id)
+      .delete()
+      .then((_) {
+        if (!mounted) return;
+
+        Provider.of<QuickListsProvider>(
+          context,
+          listen: false
+        ).removeListItem(
+          widget.listItem,
+          listId: widget.quickList.id
+        );
+      });
+  }
+
   void _updateItemDescripton(String value) {
     fireDb.collection('lists').doc(widget.quickList.id)
       .collection('list-items').doc(widget.listItem.id)
@@ -129,9 +146,7 @@ class _ListItemCardState extends State<ListItemCard> {
                 setState(() => isEditing = true);
               },
               onPanUpdate: (DragUpdateDetails details) {
-                if (details.delta.dx > 0) {
-                  print('Swiped right TODO: Delete item');
-                }
+                if (details.delta.dx > 0) { _deleteItem(); }
               },
               child: Text(
                 widget.listItem.description,

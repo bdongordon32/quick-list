@@ -86,7 +86,7 @@ class _ShowListState extends State<ShowList> {
               },
               onLongPress: () {
                 fireDb.collection('lists').doc(widget.quickList.id).delete()
-                  .then((res) {
+                  .then((_) {
                     if (context.mounted) {
                       Provider.of<QuickListsProvider>(
                         context,
@@ -141,15 +141,21 @@ class _ShowListState extends State<ShowList> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             isDismissible: false,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(2)
             ),
             builder: (BuildContext context) {
-              return AddForm(
-                quickList: list,
-                bottomSheetContext: context,
-                fieldController: listTextFieldController
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom
+                ),
+                child: AddForm(
+                  quickList: list,
+                  bottomSheetContext: context,
+                  fieldController: listTextFieldController
+                ),
               );
             }
           );

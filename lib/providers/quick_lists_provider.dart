@@ -84,6 +84,11 @@ class QuickListsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeListItem(QuickListItem item, { required String listId }) {
+    _listItemsByListId[listId]!.remove(item);
+    notifyListeners();
+  }
+
   QuickListItem _selectedListItem(String listItemId, { required String listId }) {
     return _listItemsByListId[listId]
       !.firstWhere((QuickListItem element) => element.id == listItemId);
