@@ -74,8 +74,6 @@ class _ListItemCardState extends State<ListItemCard> {
   void initState() {
     super.initState();
 
-    // descriptionController.text = widget.listItem.description;
-
     setState(() {
       isCompleted = widget.listItem.completed;
     });
@@ -114,6 +112,7 @@ class _ListItemCardState extends State<ListItemCard> {
                 TextInput(
                   inputController: descriptionController,
                   inputAction: TextInputAction.go,
+                  maxNoOfLines: 3,
                   onFieldSubmit: (String value) => _updateItemDescripton(value)
                 ),
                 IconButton(
