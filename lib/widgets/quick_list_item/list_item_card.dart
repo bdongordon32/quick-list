@@ -6,6 +6,7 @@ import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
 
+// TODO: Error handling from fireDb
 class ListItemCard extends StatefulWidget {
   const ListItemCard(
     this.listItem,
@@ -35,34 +36,38 @@ class _ListItemCardState extends State<ListItemCard> {
       .collection('list-items').doc(listItemId)
       .set({ 'completed': value }, SetOptions(merge: true))
       .then((_) {
-        if (mounted) {
-          QuickListsProvider providerInstance = Provider.of<QuickListsProvider>(
-            context,
-            listen: false
-          );
+        if (!mounted) return;
 
-          if (value) {
-            providerInstance.markItemAsComplete(widget.quickList, listItemId);
-          } else {
-            providerInstance.markItemAsInComplete(widget.quickList, listItemId);
-          }
+        QuickListsProvider providerInstance = Provider.of<QuickListsProvider>(
+          context,
+          listen: false
+        );
+
+        if (value) {
+          providerInstance.markItemAsComplete(widget.quickList, listItemId);
+        } else {
+          providerInstance.markItemAsInComplete(widget.quickList, listItemId);
         }
       });
   }
 
   void _updateItemDescripton(String value) {
-    // print(widget.listItem.id);
-    // print(widget.quickList.id);
-    // print(value);
-    Provider.of<QuickListsProvider>(
-      context,
-      listen: false
-    ).updateListItem(
-      widget.quickList,
-      widget.listItem.id,
-      description: value
-    );
-    setState(() => isEditing = false);
+    fireDb.collection('lists').doc(widget.quickList.id)
+      .collection('list-items').doc(widget.listItem.id)
+      .set({ 'description': value }, SetOptions(merge: true))
+      .then((_) {
+        if (!mounted) return;
+
+        Provider.of<QuickListsProvider>(
+          context,
+          listen: false
+        ).updateListItem(
+          widget.quickList,
+          widget.listItem.id,
+          description: value
+        );
+        setState(() => isEditing = false);
+      });
   }
 
   @override

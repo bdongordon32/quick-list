@@ -80,9 +80,7 @@ class QuickListsProvider extends ChangeNotifier {
   }
 
   void updateListItem(QuickList list, String listItemId, { required String description }) {
-    // TODO: Use description setter
-    _selectedListItem(listItemId, listId: list.id)
-      .description = description; 
+    _selectedListItem(listItemId, listId: list.id).description = description;
     notifyListeners();
   }
 
