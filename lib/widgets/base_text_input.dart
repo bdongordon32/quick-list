@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class TextInput extends StatelessWidget {
-  const TextInput({
-    required this.label,
+class BaseTextInput extends StatelessWidget {
+  const BaseTextInput({
+    this.label,
     this.isRequired = false,
     this.inputController,
     this.minNoOfLines = 1,
@@ -12,10 +12,12 @@ class TextInput extends StatelessWidget {
     this.defaultValue,
     this.textStyle,
     this.labelStyle,
+    this.inputAction,
+    this.onFieldSubmit,
     super.key
   });
 
-  final String label;
+  final String? label;
   final bool isRequired;
   final int minNoOfLines;
   final int maxNoOfLines;
@@ -25,6 +27,8 @@ class TextInput extends StatelessWidget {
   final String? defaultValue;
   final TextStyle? textStyle;
   final TextStyle? labelStyle;
+  final TextInputAction? inputAction;
+  final Function(String value)? onFieldSubmit;
 
   String? validateInput(value) {
     if ((value == null || value.isEmpty) && isRequired) {
@@ -54,6 +58,8 @@ class TextInput extends StatelessWidget {
         labelStyle: labelStyle
       ),
       style: textStyle,
+      textInputAction: inputAction,
+      onFieldSubmitted: (String value) => onFieldSubmit!(value),
       validator: (value) => validateInput(value),
     );
   }

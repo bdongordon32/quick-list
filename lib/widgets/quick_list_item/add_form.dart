@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
-import 'package:quick_list/widgets/text_input.dart';
+import 'package:quick_list/widgets/base_text_input.dart';
 
 class AddForm extends StatelessWidget {
   AddForm({
@@ -29,7 +29,7 @@ class AddForm extends StatelessWidget {
       child: Wrap(
         clipBehavior: Clip.antiAlias,
         children: [
-          TextInput(
+          BaseTextInput(
             label: 'Content',
             isRequired: true,
             inputController: fieldController,

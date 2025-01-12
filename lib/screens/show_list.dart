@@ -8,7 +8,7 @@ import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/quick_list_item/add_form.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
-import 'package:quick_list/widgets/text_input.dart';
+import 'package:quick_list/widgets/base_text_input.dart';
 
 class ShowList extends StatefulWidget {
   const ShowList(this.quickList, {super.key});
@@ -45,13 +45,17 @@ class _ShowListState extends State<ShowList> {
       fireDb.collection('lists').doc(listId)
         .set({ 'title': titleFieldText }, SetOptions(merge: true))
         .then((event) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Title has been saved'))
-            );
-            setState(() { isTitleChanged = false; });
-            list.setTitle(titleFieldText);
-          }
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Title has been saved'))
+          );
+          setState(() { isTitleChanged = false; });
+          list.setTitle(titleFieldText);
+          Provider.of<QuickListsProvider>(
+            context,
+            listen: false
+          ).updateListTitle(list, titleFieldText);
         });
     }
 
@@ -60,7 +64,7 @@ class _ShowListState extends State<ShowList> {
         title: Row(
           children: [
             Expanded(
-              child: TextInput(
+              child: BaseTextInput(
                 label: 'Title',
                 inputController: titleFieldController,
                 textStyle: TextStyle(color: primaryLightAccent),
@@ -70,10 +74,14 @@ class _ShowListState extends State<ShowList> {
                 },
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.check),
-              disabledColor: appBarLabelColor,
-              onPressed: isTitleChanged ? saveTitle : null,
+            Visibility(
+              visible: isTitleChanged,
+              maintainSize: false,
+              child: IconButton(
+                icon: const Icon(Icons.check),
+                disabledColor: appBarLabelColor,
+                onPressed: isTitleChanged ? saveTitle : null,
+              ),
             ),
             TextButton(
               style: TextButton.styleFrom(iconColor: deleteButtonColor),
@@ -86,7 +94,7 @@ class _ShowListState extends State<ShowList> {
               },
               onLongPress: () {
                 fireDb.collection('lists').doc(widget.quickList.id).delete()
-                  .then((res) {
+                  .then((_) {
                     if (context.mounted) {
                       Provider.of<QuickListsProvider>(
                         context,
@@ -141,15 +149,21 @@ class _ShowListState extends State<ShowList> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             isDismissible: false,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(2)
             ),
             builder: (BuildContext context) {
-              return AddForm(
-                quickList: list,
-                bottomSheetContext: context,
-                fieldController: listTextFieldController
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom
+                ),
+                child: AddForm(
+                  quickList: list,
+                  bottomSheetContext: context,
+                  fieldController: listTextFieldController
+                ),
               );
             }
           );

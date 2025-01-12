@@ -42,6 +42,11 @@ class QuickListsProvider extends ChangeNotifier {
     }
   }
 
+  void updateListTitle(QuickList list, String title) {
+    _selectedList(list.id).setTitle(title);
+    notifyListeners();
+  }
+
   // void addItemToList(QuickList list, QuickList)
   void addItemsToList(QuickList list, Iterable<QuickListItem> items) {
     if (items.isEmpty) return;
@@ -50,18 +55,6 @@ class QuickListsProvider extends ChangeNotifier {
     if (_listItemsByListId[listId] == null) return;
 
     _listItemsByListId[listId]?.addAll((items));
-    notifyListeners();
-  }
-
-  void markItemAsComplete(QuickList list, String listItemId) {
-    String listId = list.id;
-    _selectedListItem(listItemId, listId: listId).completed = true;
-    notifyListeners();
-  }
-
-  void markItemAsInComplete(QuickList list, String listItemId) {
-    String listId = list.id;
-    _selectedListItem(listItemId, listId: listId).completed = false;
     notifyListeners();
   }
 
@@ -77,6 +70,36 @@ class QuickListsProvider extends ChangeNotifier {
     int listCount = items.length;
 
     return '$completeItems/$listCount items completed';
+  }
+
+  /// QuickListItems Provider methods below
+
+  void markItemAsComplete(QuickList list, String listItemId) {
+    String listId = list.id;
+    _selectedListItem(listItemId, listId: listId).completed = true;
+    notifyListeners();
+  }
+
+  void markItemAsInComplete(QuickList list, String listItemId) {
+    String listId = list.id;
+    _selectedListItem(listItemId, listId: listId).completed = false;
+    notifyListeners();
+  }
+
+  void updateListItem(QuickList list, String listItemId, { required String description }) {
+    _selectedListItem(listItemId, listId: list.id).description = description;
+    notifyListeners();
+  }
+
+  void removeListItem(QuickListItem item, { required String listId }) {
+    _listItemsByListId[listId]!.remove(item);
+    notifyListeners();
+  }
+
+  /// Private methods
+
+  QuickList _selectedList(String listId) {
+    return _lists.firstWhere((QuickList element) => element.id == listId);
   }
 
   QuickListItem _selectedListItem(String listItemId, { required String listId }) {

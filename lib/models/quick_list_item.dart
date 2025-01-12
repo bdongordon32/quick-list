@@ -2,8 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickListItem {
   final String id;
-  final String description;
+  String description;
   bool completed;
+
+  // TODO: add getters/setters
+
+  // String _description;
+  // String get description => _description;
+  // set description(String value) {
+  //  _description = value;
+  // }
 
   QuickListItem({
     required this.description,
