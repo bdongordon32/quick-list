@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/text_input.dart';
+// import 'package:flutter/services.dart';
+
 
 // TODO: Error handling from fireDb
 class ListItemCard extends StatefulWidget {
@@ -23,6 +26,8 @@ class ListItemCard extends StatefulWidget {
 class _ListItemCardState extends State<ListItemCard> {
   bool isCompleted = false;
   bool isEditing = false;
+
+  bool isDeletingItem = false;
   
   final FirebaseFirestore fireDb = FirebaseFirestore.instance;
   final TextEditingController descriptionController = TextEditingController();
@@ -145,13 +150,44 @@ class _ListItemCardState extends State<ListItemCard> {
               onTap: () {
                 setState(() => isEditing = true);
               },
-              onPanUpdate: (DragUpdateDetails details) {
-                if (details.delta.dx > 0) { _deleteItem(); }
+              onLongPressUp: () {
+                // Clipboard.setData(
+                //   ClipboardData(
+                //     text: "Your Copy text",
+                //   ),
+                // );
               },
-              child: Text(
-                widget.listItem.description,
-                overflow: TextOverflow.clip
-              ),
+              onPanUpdate: (DragUpdateDetails details) {
+                if (details.delta.dx < -10) {
+                  setState(() => isDeletingItem = true);
+                } else if (details.delta.dx > 10) {
+                  setState(() => isDeletingItem = false);
+                }
+                // _deleteItem();
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.listItem.description,
+                      overflow: TextOverflow.clip
+                    ),
+                  ),
+                  Visibility(
+                    maintainSize: false,
+                    visible: isDeletingItem,
+                    child: IconButton(
+                      onPressed: () {
+                        _deleteItem();
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: deleteButtonColor,
+                      )
+                    )
+                  )
+                ],
+              )
             )
         )
       ]
