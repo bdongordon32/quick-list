@@ -74,10 +74,14 @@ class _ShowListState extends State<ShowList> {
                 },
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.check),
-              disabledColor: appBarLabelColor,
-              onPressed: isTitleChanged ? saveTitle : null,
+            Visibility(
+              visible: isTitleChanged,
+              maintainSize: false,
+              child: IconButton(
+                icon: const Icon(Icons.check),
+                disabledColor: appBarLabelColor,
+                onPressed: isTitleChanged ? saveTitle : null,
+              ),
             ),
             TextButton(
               style: TextButton.styleFrom(iconColor: deleteButtonColor),
