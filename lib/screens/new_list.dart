@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
-import 'package:quick_list/widgets/text_input.dart';
+import 'package:quick_list/widgets/base_text_input.dart';
 
 class NewList extends StatefulWidget {
   const NewList({ super.key });
@@ -88,14 +88,14 @@ class _NewListState extends State<NewList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextInput(
+              BaseTextInput(
                 label: 'Title',
                 inputController: titleController,
                 isRequired: true,
               ),
               Padding(padding: EdgeInsets.all(8)),
               Expanded(
-                child: TextInput(
+                child: BaseTextInput(
                   label: 'Content',
                   isRequired: true,
                   inputController: listTextFieldController,

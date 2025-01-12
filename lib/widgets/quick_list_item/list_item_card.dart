@@ -5,8 +5,8 @@ import 'package:quick_list/app_theme.dart';
 import 'package:quick_list/models/quick_list.dart';
 import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
-import 'package:quick_list/widgets/text_input.dart';
-// import 'package:flutter/services.dart';
+import 'package:quick_list/widgets/base_text_input.dart';
+import 'package:flutter/services.dart';
 
 
 // TODO: Error handling from fireDb
@@ -131,7 +131,7 @@ class _ListItemCardState extends State<ListItemCard> {
             Stack(
               alignment: AlignmentDirectional.centerEnd,
               children: <Widget>[
-                TextInput(
+                BaseTextInput(
                   inputController: descriptionController,
                   inputAction: TextInputAction.go,
                   maxNoOfLines: 3,
@@ -151,11 +151,14 @@ class _ListItemCardState extends State<ListItemCard> {
                 setState(() => isEditing = true);
               },
               onLongPressUp: () {
-                // Clipboard.setData(
-                //   ClipboardData(
-                //     text: "Your Copy text",
-                //   ),
-                // );
+                Clipboard.setData(
+                  ClipboardData(
+                    text: widget.listItem.description,
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Item description copied'), duration: Duration(milliseconds: 800))
+                );
               },
               onPanUpdate: (DragUpdateDetails details) {
                 if (details.delta.dx < -10) {

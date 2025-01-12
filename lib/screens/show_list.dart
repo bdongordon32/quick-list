@@ -8,7 +8,7 @@ import 'package:quick_list/models/quick_list_item.dart';
 import 'package:quick_list/providers/quick_lists_provider.dart';
 import 'package:quick_list/widgets/quick_list_item/add_form.dart';
 import 'package:quick_list/widgets/quick_list_item/list_item_card.dart';
-import 'package:quick_list/widgets/text_input.dart';
+import 'package:quick_list/widgets/base_text_input.dart';
 
 class ShowList extends StatefulWidget {
   const ShowList(this.quickList, {super.key});
@@ -60,7 +60,7 @@ class _ShowListState extends State<ShowList> {
         title: Row(
           children: [
             Expanded(
-              child: TextInput(
+              child: BaseTextInput(
                 label: 'Title',
                 inputController: titleFieldController,
                 textStyle: TextStyle(color: primaryLightAccent),
