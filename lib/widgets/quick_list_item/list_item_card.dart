@@ -70,6 +70,8 @@ class _ListItemCardState extends State<ListItemCard> {
           widget.listItem,
           listId: widget.quickList.id
         );
+
+        setState(() => isDeletingItem = false);
       });
   }
 
