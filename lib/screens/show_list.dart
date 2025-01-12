@@ -45,13 +45,17 @@ class _ShowListState extends State<ShowList> {
       fireDb.collection('lists').doc(listId)
         .set({ 'title': titleFieldText }, SetOptions(merge: true))
         .then((event) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Title has been saved'))
-            );
-            setState(() { isTitleChanged = false; });
-            list.setTitle(titleFieldText);
-          }
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Title has been saved'))
+          );
+          setState(() { isTitleChanged = false; });
+          list.setTitle(titleFieldText);
+          Provider.of<QuickListsProvider>(
+            context,
+            listen: false
+          ).updateListTitle(list, titleFieldText);
         });
     }
 
